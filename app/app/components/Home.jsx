@@ -10,12 +10,15 @@ import Welcome from './Welcome'
 const Home = () => {
     const [cookies, setCookie] = useCookies(['user, isAuth'])
     const [person, setPerson] = useState({})
-    let userHavePhoto = cookies.user.providerData[0].photoURL
+    let userHavePhoto = null
 
     useEffect(() => {
         async function getUser() {
             const response = await getUserByUID(cookies.user.uid)
             setPerson(await response)   
+            if(cookies.user) {
+                userHavePhoto = cookies.user.providerData[0].photoURL
+            }
         }
         getUser()
     }, [])
