@@ -6,32 +6,28 @@ import {GoGear} from 'react-icons/go'
 import {BsCashCoin} from 'react-icons/bs'
 import {SlPeople} from 'react-icons/sl'
 import {TbReportSearch} from 'react-icons/tb'
+import DialogAlert from '@/app/components/DialogAlert'
 
 
-export default function HorizontalCards() {
+export default function HorizontalCards({ userLoggedIn }) {
 
   const [currentCard, setCurrentCard] = useState(0)
+  const [open, setOpen] = useState(false)
   const carouselRef = useRef("")
   const [touchStartX, setTouchStartX] = useState(0)
   const [startTranslateX, setStartTranslateX] = useState(0)
   const [touchStart, setTouchStart] = useState(false)
 
+  const handleDialog = () => setOpen(!open)
+
   const cards = [
-    {
-      "color": "#DF1525",
-      "text_color": "#ffffff",
-      "icon": <PiBellSimpleRingingBold size={25} />,
-      "textone": "Emitir um",
-      "texttwo": "Alerta",
-      "url": "/alert"
-    },
     {
       "color": "#E8FFEB",
       "text_color": "#000000",
       "icon": <GoGear size={25} />,
       "textone": "Acessar as",
       "texttwo": "Configurações",
-      "url": "/settings"
+      "url": "/app/settings"
     },
     {
       "color": "#DFF1FF",
@@ -39,7 +35,7 @@ export default function HorizontalCards() {
       "icon": <BsCashCoin size={25} />,
       "textone": "Minha",
       "texttwo": "Assinatura",
-      "url": "/subscription"
+      "url": "/app/subscription"
     },
     {
       "color": "#EAFEAB",
@@ -47,7 +43,7 @@ export default function HorizontalCards() {
       "icon": <SlPeople size={25} />,
       "textone": "Minha",
       "texttwo": "Vizinhança",
-      "url": "/comunities"
+      "url": "/app/comunities"
     },
     {
       "color": "#FFE7AE",
@@ -55,7 +51,7 @@ export default function HorizontalCards() {
       "icon": <SlPeople size={25} />,
       "textone": "Procurar",
       "texttwo": "Comunidade",
-      "url": "/find"
+      "url": "/app/find"
     }
   ]
 
@@ -117,6 +113,14 @@ export default function HorizontalCards() {
       >
 
         
+        <Card onClick={handleDialog} url={"none"} key={"#DF1525"} color={`#DF1525`} text_color={`#fff`} icon={<PiBellSimpleRingingBold size={25} />}>
+            <div>
+              <span className='text-[15px]'>Emitir um</span>
+              <p className='text-[18px] font-bold'>Alerta</p>
+            </div>
+        </Card>
+        <DialogAlert open={open} handler={handleDialog} userLoggedIn={userLoggedIn} />
+      
         {cards.map((card) => (
           
           <Card url={card.url} key={card.color} color={`${card.color}`} text_color={`${card.text_color}`} icon={card.icon}>

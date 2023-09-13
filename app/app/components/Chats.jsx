@@ -15,35 +15,6 @@ const Chats = () => {
                         <Typography variant="h6" color="red">
                             Tentativa de Assalto
                         </Typography>
-                        {/* <Typography variant="small" color="gray" className="font-normal">
-                            <span className="font-bold">@juniorrocha2:</span> Gente o que aconteceu?
-                        </Typography> */}
-                    </div>
-                </ListItem>
-                <ListItem>
-                    <ListItemPrefix>
-                        <Avatar variant="circular" alt="foto de grupo" src="https://random.imagecdn.app/400/400"  />
-                    </ListItemPrefix>
-                    <div>
-                        <Typography variant="h6" color="blue-gray">
-                            Carla Andrade
-                        </Typography>
-                        <Typography variant="small" color="gray" className="font-normal">
-                            Eae como vai?
-                        </Typography>
-                    </div>
-                </ListItem>
-                <ListItem>
-                    <ListItemPrefix>
-                        <Avatar variant="circular" alt="foto de grupo" src="https://random.imagecdn.app/250/250"  />
-                    </ListItemPrefix>
-                    <div>
-                        <Typography variant="h6" color="blue-gray">
-                            Carla Andrade
-                        </Typography>
-                        <Typography variant="small" color="gray" className="font-normal">
-                            Eae como vai?
-                        </Typography>
                     </div>
                 </ListItem>
             </List>

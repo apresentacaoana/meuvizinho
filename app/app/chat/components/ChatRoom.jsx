@@ -22,8 +22,8 @@ const ChatRoom = () => {
 
     return (
         <div>
-            <div className="flex flex-col gap-5 md:mb-[80px] mb-[100px] xl:mx-80 md:my-[20px] m-5">
-                {messages && messages.docs.map(msg => <Message key={msg.id} text={msg.data().text} createdAt={msg.data().createdAt} uid={cookies.user.uid} />)}
+            <div className="flex flex-col gap-8 md:mb-[80px] mb-[100px] xl:mx-80 md:my-[20px] m-5">
+                {messages && messages.docs.map(msg => <Message name={msg.data().author} key={msg.id} text={msg.data().text} photoURL={msg.data().photoURL} createdAt={msg.data().createdAt} uid={msg.data().uid} />)}
                 <div ref={scrollTo}></div>
             </div>
             <InputMessage messageRef={messageRef} />

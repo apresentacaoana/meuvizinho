@@ -1,24 +1,33 @@
 'use client'
 import { Typography } from "@material-tailwind/react"
 import { useCookies } from "react-cookie"
-import { setState } from 'react'
+import { setState, useEffect, useState } from 'react'
 import moment from "moment/moment"
+import { getUserByUID } from "@/app/auth/authentication"
 
-const Message = ({ text, uid, createdAt }) => {
+const Message = ({ text, uid, photoURL, name, createdAt }) => {
     const [cookies, setCookie] = useCookies(['isAuth', 'user'])
     if(!cookies.user) return
     const itsMe = uid === cookies.user.uid
     let timestamp = moment.unix(createdAt).format('LT')
 
     return (
-        <div className="self-end justify-self-end  flex-col flex">
-            <div className="bg-[#A1C7FF] text-[13px]  flex items-start self-end justify-self-end  rounded-t-[24px]  rounded-bl-[24px] text-white">
-                <div className="w-[100%] py-[10px] text-start px-[25px]">
-                    {text}
+        <div className={`${itsMe ? 'self-end justify-self-end' : 'self-start justify-self-start'} flex items-end gap-3 `}>
+            {!itsMe && (
+                <img src={photoURL} alt="" className="rounded-full w-[37px] h-[37px]" />
+            )}
+            <div className={`w-full flex-col flex`}>
+                <div className={`${itsMe ? 'bg-[#A1C7FF] text-white' : 'bg-[#F5F5F5] text-black'} relative text-[13px] flex-col  flex items-start self-end justify-self-end  rounded-t-[24px] ${itsMe ? 'rounded-bl-[24px]' : 'rounded-br-[24px]'} `}>
+                    {!itsMe && (<span className="font-bold px-[25px] pt-[10px]">{name}</span>)}
+                    <div className={`w-[100%] ${itsMe ? 'py-[10px]' : 'pb-[10px]'} text-start px-[25px]`}>
+                        {text}
+                    </div>
+                    <Typography variant="small" className={`${itsMe ? "right-0" : "left-0 ml-3"} w-[70px] absolute -bottom-6 justify-self-start self-end text-[#757575]`}>{timestamp}</Typography>
+            
                 </div>
             </div>
-            <Typography variant="small" className="ml-[15px] justify-self-start self-end mt-[6px] text-[#757575]">{timestamp}</Typography>
         </div>
+
     )
 }
 

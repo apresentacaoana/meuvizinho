@@ -1,6 +1,6 @@
 import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth"
 import { auth, db } from "../firebase"
-import { addDoc, collection, getDoc, getDocs, limit, orderBy, query, where } from "firebase/firestore"
+import { addDoc, collection, doc, getDoc, getDocs, limit, orderBy, query, updateDoc, where } from "firebase/firestore"
 import { limitToFirst } from "firebase/database"
 import { useCookies } from "react-cookie"
 import { useCollection } from 'react-firebase-hooks/firestore'
@@ -30,7 +30,9 @@ const registrarComEmailESenha = async(name, email, pwd) => {
             uid: user.uid,
             name: name,
             authProvider: "local",
-            email
+            email,
+            photoURL: "",
+            nickname: ""
         })
     } catch(e) {
         console.log(e)
@@ -91,6 +93,31 @@ const getUserByUID = async (uid) => {
     }
 }
 
+const registerNickname = async (uid, nickname) => {
+    try {
+        const q = query(collection(db, "users"), where("uid", "==", uid), limit(1))
+        const docs = await getDocs(q)
+        docs.forEach(async (doc1) => {
+            await updateDoc(doc(db, "users", doc1.id), {
+                "nickname": nickname
+            })
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const verificarNickname = async (nickname) => {
+    try {
+        const q = query(collection(db, "users"), where("nickname", "==", nickname), limit(1))
+        const docs = await getDocs(q)
+        if(docs.docs.length > 0) return true
+        return false
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const entrarComGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, googleProvider)
@@ -103,9 +130,45 @@ const entrarComGoogle = async () => {
                 uid: user.uid,
                 name: user.displayName,
                 authProvider: "google",
-                email: user.email
+                email: user.email,
+                photoURL: user.photoURL,
+                nickname: ""
             })
         }
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const getAlertByID = async (id) => {
+    try {
+        const q = query(collection(db, "alerts"), where("id", "==", id), limit(1))
+        const docs = await getDocs(q)
+        let response = {}
+        docs.forEach((doc) => {
+            if(doc.data().id == id) {
+                response = doc.data()
+                console.log("achou")
+            }
+        })
+    
+        return response
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const emitirAlerta = async (id, tipo, situacao, userLoggedIn, details = "") => {
+    try {
+        await addDoc(collection(db, "alerts"), {
+            tipo,
+            situacao,
+            id,
+            createdAt: new Date(),
+            uid: userLoggedIn.uid,
+            author: userLoggedIn.nickname,
+            details
+        })
     } catch (e) {
         console.log(e)
     }
@@ -119,5 +182,9 @@ export {
     entrarComGoogle,
     verificarSeOUsuarioJaExiste,
     verificarSeOEmailJaExiste,
-    getUserByUID
+    getUserByUID,
+    registerNickname,
+    verificarNickname,
+    emitirAlerta,
+    getAlertByID
 }
