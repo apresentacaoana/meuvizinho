@@ -84,7 +84,7 @@ const getUserByUID = async (uid) => {
         docs.forEach((doc) => {
             if(doc.data().uid == uid) response = doc.data()
         })
-        console.log(response)
+    
         return response
     } catch (error) {
         console.log(error)

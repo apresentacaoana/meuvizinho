@@ -11,14 +11,13 @@ const Home = () => {
     const [cookies, setCookie] = useCookies(['user, isAuth'])
     const [person, setPerson] = useState({})
     let userHavePhoto = null
+    if(cookies.user) userHavePhoto = cookies.user.photoURL
 
     useEffect(() => {
         async function getUser() {
             const response = await getUserByUID(cookies.user.uid)
-            setPerson(await response)   
-            if(cookies.user) {
-                userHavePhoto = cookies.user.providerData[0].photoURL
-            }
+            setPerson(await response)
+            console.log(cookies.user)   
         }
         getUser()
     }, [])

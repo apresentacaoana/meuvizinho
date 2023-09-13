@@ -40,7 +40,7 @@ const Alert = ({ data }) => {
                         </TimelineHeader>
                         
                         <TimelineBody className="">
-                            <Typography variant="small" color="gary" className="font-normal text-gray-600">
+                            <Typography variant="small" className="font-normal text-gray-600">
                                 {data.details}
                             </Typography>
                         </TimelineBody>

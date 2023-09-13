@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 const Chats = () => {
     const router = useRouter()
     return (
-        <div className="flex flex-col flex-grow h-full gap-3">
+        <div className="flex flex-grow flex-col h-full gap-3">
             <List>
                 <ListItem className="bg-[#FFC9C6] animate-pulse" onClick={() => router.push('/app/chat')}>
                     <ListItemPrefix>

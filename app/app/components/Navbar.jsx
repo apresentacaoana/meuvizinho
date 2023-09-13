@@ -15,7 +15,7 @@ const Navbar = ({ userHavePhoto }) => {
                     meu<span className='text-green-400'>vizinho.</span>
                 </Typography>
                 <div className="cursor-pointer">    
-                    {userHavePhoto ? <Image onClick={openDrawer} width={35} height={35} alt="foto do usuario" src={userHavePhoto} className='h-[35px] w-[35px] rounded-full' /> : <PiUserCircleFill onClick={openDrawer} size={35} />}
+                    {userHavePhoto ? <img onClick={openDrawer} width={35} height={35} alt="foto do usuario" src={userHavePhoto} className='h-[35px] w-[35px] rounded-full' /> : <PiUserCircleFill onClick={openDrawer} size={35} />}
                 </div>
             </div>
             <ProfileDrawer open={open} handleClose={handleClose} />
