@@ -1,9 +1,7 @@
 'use client'
 import { getUserByUID, logout } from '@/app/auth/authentication'
-import { Button, Typography } from '@material-tailwind/react'
 import { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
-import {PiUserCircleFill} from 'react-icons/pi'
 import HorizontalCards from './HorizontalCards'
 import Navbar from './Navbar'
 import Alerts from './Alerts'
@@ -12,14 +10,7 @@ import Welcome from './Welcome'
 const Home = () => {
     const [cookies, setCookie] = useCookies(['user, isAuth'])
     const [person, setPerson] = useState({})
-    console.log(cookies.user)
     let userHavePhoto = cookies.user.providerData[0].photoURL
-
-    const encerrarSessao = () => {
-        logout()
-        setCookie('user', null)
-        setCookie('isAuth', null)
-    }
 
     useEffect(() => {
         async function getUser() {

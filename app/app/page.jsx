@@ -1,8 +1,5 @@
 'use client'
 import { useRouter } from "next/navigation"
-import { useUserContext } from "../auth/appContext"
-import { Button } from "@material-tailwind/react"
-import { logout } from "../auth/authentication"
 import UI from "./components/UI"
 import { useCookies } from "react-cookie"
 import { useEffect } from "react"
