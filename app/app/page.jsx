@@ -32,7 +32,7 @@ const App = () => {
             })
         }
         getData()
-    }, [cookies.user])
+    }, [])
     return (
         <UI />
     )

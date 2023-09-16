@@ -46,7 +46,7 @@ const Form = () => {
             console.log(response)
         }
         getUser()
-    }, [cookies.user])
+    }, [])
 
     const handleCreate = async () => {
         if(!nome || !endereco) return

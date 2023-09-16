@@ -28,7 +28,7 @@ const Home = () => {
       setLoading(false);
     }
     getUser();
-  }, [cookies.user]);
+  }, []);
 
   return (
     <>

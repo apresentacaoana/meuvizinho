@@ -32,7 +32,7 @@ const ComunityHome = () => {
             setLoading(false)
         }
         getData()
-    }, [cookies.user])
+    }, [])
 
     return (
         <div>

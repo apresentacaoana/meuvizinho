@@ -29,7 +29,7 @@ const RequestPage = () => {
             })
         }
         getData()
-    }, [cookies.user])
+    }, [])
 
     return (
         <>

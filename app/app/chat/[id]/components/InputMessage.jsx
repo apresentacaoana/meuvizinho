@@ -19,7 +19,7 @@ const InputMessage = ({ messageRef, id, groupId }) => {
             await setUser(response)
         }
         getUser()
-    }, [cookies.user])
+    }, [])
 
     const sendMessage = async() => {
         if(!cookies.user || !message) return
