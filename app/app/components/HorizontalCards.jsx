@@ -71,25 +71,27 @@ export default function HorizontalCards({ userLoggedIn }) {
         "texttwo": "Solicitações",
         "url": "/app/requests/find"
       })
-      if(userLoggedIn.role === 'sindicate' && !cookies.groupId) {
-        cardsRaw.push({
-          "color": "#FFBCAE",
-          "text_color": "#000000",
-          "icon": <SlPeople size={25} />,
-          "textone": "Criar",
-          "texttwo": "Comunidade",
-          "url": "/app/community/create"
-        })
-      }
-      else if(userLoggedIn.role === 'common' && !cookies.groupId) {
-        cardsRaw.push({
-          "color": "#FFE7AE",
-          "text_color": "#000000",
-          "icon": <SlPeople size={25} />,
-          "textone": "Procurar",
-          "texttwo": "Comunidade",
-          "url": "/app/community/find"
-        })
+      if(!cookies.groupId) {
+        if(userLoggedIn.role === 'sindicate') {
+          cardsRaw.push({
+            "color": "#FFBCAE",
+            "text_color": "#000000",
+            "icon": <SlPeople size={25} />,
+            "textone": "Criar",
+            "texttwo": "Comunidade",
+            "url": "/app/community/create"
+          })
+        }
+        else if(userLoggedIn.role === 'common') {
+          cardsRaw.push({
+            "color": "#FFE7AE",
+            "text_color": "#000000",
+            "icon": <SlPeople size={25} />,
+            "textone": "Procurar",
+            "texttwo": "Comunidade",
+            "url": "/app/community/find"
+          })
+        }
       }
     }
     return cardsRaw
