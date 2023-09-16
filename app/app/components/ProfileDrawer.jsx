@@ -1,5 +1,5 @@
 'use client'
-import { logout } from "@/app/auth/authentication"
+import { logout } from "../../../app/auth/authentication"
 import { Drawer, IconButton, List, ListItem, ListItemPrefix, Typography } from "@material-tailwind/react"
 import { useRouter } from "next/navigation"
 import { useCookies } from "react-cookie"

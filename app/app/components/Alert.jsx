@@ -6,6 +6,19 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"
 const Alert = ({ data }) => {
     const [open, setOpen] = useState(0)
     const handleOpen = value => setOpen(open === value ? 0 : value)
+
+    const tipoParse = {
+        "ocorrendoagora": "Ocorrendo",
+        "tentativa": "Tentativa de",
+        "suspeita": "Suspeita de"
+    }
+
+    const situacaoParse = {
+        "assalto": "Assalto",
+        "invasao": "Invasão",
+        "furto": "Furto"
+    }
+
     return (
         <Accordion icon={open === data.id ? <AiOutlineMinus className="text-green-400" size={20} /> : <AiOutlinePlus className="text-green-400" size={20} />} open={open === data.id} className="mb-2 rounded-lg border border-blue-gray-100 px-4">
             <AccordionHeader
@@ -14,7 +27,7 @@ const Alert = ({ data }) => {
                 open === data.id ? "text-green-400 hover:!text-green-800" : ""
             }`}
             >
-            Tentativa de {data.type}
+            {tipoParse[data.tipo]} {situacaoParse[data.situacao]}
             </AccordionHeader>
             <AccordionBody className="pt-0 text-base font-normal">
                 <Timeline>
@@ -23,7 +36,7 @@ const Alert = ({ data }) => {
                         <TimelineHeader className="h-3">
                             <TimelineIcon />
                             <Typography variant="h6" color="blue-gray" className="leading-none">
-                                Alerta emitido há {data.hours} horas
+                                Alerta emitido há {data.hours}
                             </Typography>
                         </TimelineHeader>
                         <TimelineBody className="pb-3">

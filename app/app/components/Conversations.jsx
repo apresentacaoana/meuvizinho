@@ -2,11 +2,11 @@ import { useCookies } from "react-cookie"
 import Chats from "./Chats"
 import Navbar from "./Navbar"
 import { useState } from "react"
-import Loading from "@/app/components/Loading"
+import Loading from "../../../app/components/Loading"
 
-const Conversations = () => {
-    const [cookies, setCookie] = useCookies(['user, isAuth'])
+const Conversations = ({ groupId }) => {
     const [loading, setLoading] = useState(true)
+    const [cookies, setCookie] = useCookies(['user, isAuth'])
     let userHavePhoto = null
     if(cookies.user) userHavePhoto = cookies.user.photoURL
     setTimeout(() => {
@@ -23,7 +23,7 @@ const Conversations = () => {
                         <Navbar userHavePhoto={userHavePhoto} profile={false} />
                     </div>
                     <div className="xl:mx-80 flex-grow justify-self-start ">
-                        <Chats />
+                        <Chats groupId={groupId} />
                     </div>
                     <div className="flex-grow"></div>
                 </div>

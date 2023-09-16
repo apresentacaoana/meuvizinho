@@ -1,4 +1,4 @@
-import { TouchEvent, useRef, useState } from 'react'
+import { TouchEvent, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Card from './Card'
 import {PiBellSimpleRingingBold} from 'react-icons/pi'
@@ -6,7 +6,10 @@ import {GoGear} from 'react-icons/go'
 import {BsCashCoin} from 'react-icons/bs'
 import {SlPeople} from 'react-icons/sl'
 import {TbReportSearch} from 'react-icons/tb'
-import DialogAlert from '@/app/components/DialogAlert'
+import DialogAlert from '../../../app/components/DialogAlert'
+import { useCookies } from 'react-cookie'
+import DialogAlertGroup from '../../components/DialogAlertGroup'
+import {BiGitPullRequest} from 'react-icons/bi'
 
 
 export default function HorizontalCards({ userLoggedIn }) {
@@ -16,44 +19,81 @@ export default function HorizontalCards({ userLoggedIn }) {
   const carouselRef = useRef("")
   const [touchStartX, setTouchStartX] = useState(0)
   const [startTranslateX, setStartTranslateX] = useState(0)
+  const [cookies, setCookie] = useCookies(['groupId'])
   const [touchStart, setTouchStart] = useState(false)
 
   const handleDialog = () => setOpen(!open)
 
-  const cards = [
-    {
-      "color": "#E8FFEB",
-      "text_color": "#000000",
-      "icon": <GoGear size={25} />,
-      "textone": "Acessar as",
-      "texttwo": "Configurações",
-      "url": "/app/settings"
-    },
-    {
-      "color": "#DFF1FF",
-      "text_color": "#000000",
-      "icon": <BsCashCoin size={25} />,
-      "textone": "Minha",
-      "texttwo": "Assinatura",
-      "url": "/app/subscription"
-    },
-    {
-      "color": "#EAFEAB",
-      "text_color": "#000000",
-      "icon": <SlPeople size={25} />,
-      "textone": "Minha",
-      "texttwo": "Vizinhança",
-      "url": "/app/comunities"
-    },
-    {
-      "color": "#FFE7AE",
-      "text_color": "#000000",
-      "icon": <SlPeople size={25} />,
-      "textone": "Procurar",
-      "texttwo": "Comunidade",
-      "url": "/app/find"
+  const cardsF = () => {
+    let cardsRaw = [
+      {
+        "color": "#EAFEAB",
+        "text_color": "#000000",
+        "icon": <SlPeople size={25} />,
+        "textone": "Minha",
+        "texttwo": "Vizinhança",
+        "url": "/app/community"
+      },
+      {
+        "color": "#E8FFEB",
+        "text_color": "#000000",
+        "icon": <GoGear size={25} />,
+        "textone": "Acessar as",
+        "texttwo": "Configurações",
+        "url": "/app/settings"
+      },
+      {
+        "color": "#DFF1FF",
+        "text_color": "#000000",
+        "icon": <BsCashCoin size={25} />,
+        "textone": "Minha",
+        "texttwo": "Assinatura",
+        "url": "/app/subscription"
+      },
+    ]
+    
+    if(userLoggedIn.role =='sindicate' && cookies.groupId !== null) {
+      cardsRaw.push({
+        "color": "#C59BFF",
+        "text_color": "#000000",
+        "icon": <BiGitPullRequest size={25} />,
+        "textone": "Solicitações da",
+        "texttwo": "Vizinhança",
+        "url": `/app/requests/${cookies.groupId}`
+      })
     }
-  ]
+    if(userLoggedIn.role == 'common') {
+      cardsRaw.push({
+        "color": "#C59BFF",
+        "text_color": "#000000",
+        "icon": <BiGitPullRequest size={25} />,
+        "textone": "Minhas",
+        "texttwo": "Solicitações",
+        "url": "/app/requests/find"
+      })
+      if(userLoggedIn.role === 'sindicate' && !cookies.groupId) {
+        cardsRaw.push({
+          "color": "#FFBCAE",
+          "text_color": "#000000",
+          "icon": <SlPeople size={25} />,
+          "textone": "Criar",
+          "texttwo": "Comunidade",
+          "url": "/app/community/create"
+        })
+      }
+      else if(userLoggedIn.role === 'common' && !cookies.groupId) {
+        cardsRaw.push({
+          "color": "#FFE7AE",
+          "text_color": "#000000",
+          "icon": <SlPeople size={25} />,
+          "textone": "Procurar",
+          "texttwo": "Comunidade",
+          "url": "/app/community/find"
+        })
+      }
+    }
+    return cardsRaw
+  }
 
   function previousCourt() {
     setCurrentCard(currentCard === 0 ? cards.length - 2 : currentCard - 1)
@@ -99,6 +139,8 @@ export default function HorizontalCards({ userLoggedIn }) {
     setTouchStart(false)
   }
 
+  let cards = cardsF()
+
   return (
     <div className="relative mr-[-2.25rem] flex items-center overflow-hidden">
       <div
@@ -119,11 +161,16 @@ export default function HorizontalCards({ userLoggedIn }) {
               <p className='text-[18px] font-bold'>Alerta</p>
             </div>
         </Card>
-        <DialogAlert open={open} handler={handleDialog} userLoggedIn={userLoggedIn} />
+        
+        {cookies.groupId != null ? (
+          <DialogAlert open={open} handler={handleDialog} userLoggedIn={userLoggedIn} />
+        ) : (
+          <DialogAlertGroup open={open} handler={handleDialog} />
+        )}
       
         {cards.map((card) => (
           
-          <Card url={card.url} key={card.color} color={`${card.color}`} text_color={`${card.text_color}`} icon={card.icon}>
+          <Card onClick={() => {console.log()}} url={card.url} key={card.color} color={`${card.color}`} text_color={`${card.text_color}`} icon={card.icon}>
             <div>
               <span className='text-[15px]'>{card.textone}</span>
               <p className='text-[18px] font-bold'>{card.texttwo}</p>

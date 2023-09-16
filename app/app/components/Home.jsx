@@ -1,15 +1,15 @@
 'use client'
 import { motion } from 'framer-motion';
-import { getUserByUID, logout } from '@/app/auth/authentication';
+import { getUserByUID, logout } from '../../../app/auth/authentication';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import HorizontalCards from './HorizontalCards';
 import Navbar from './Navbar';
 import Alerts from './Alerts';
 import Welcome from './Welcome';
-import DialogUserName from '@/app/components/DialogUsername';
+import DialogUserName from '../../../app/components/DialogUsername';
 import { Spinner } from '@material-tailwind/react';
-import Loading from '@/app/components/Loading';
+import Loading from '../../../app/components/Loading';
 
 const Home = () => {
   const [cookies, setCookie] = useCookies(['user, isAuth']);
@@ -47,12 +47,6 @@ const Home = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <Welcome user={person} />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
             <HorizontalCards userLoggedIn={person} />
           </motion.div>
           <motion.div

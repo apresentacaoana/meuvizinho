@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
         <meta name='description' content='Description' />
       </head>
       
-      <body className={inter.className}>
+      <body className={`${inter.className} !overflow-hidden`}>
         <CookiesProvider>
           <UserContextProvider>
             {children}

@@ -1,13 +1,16 @@
 'use client'
 import { Button, Dialog, DialogBody, DialogFooter, Input, Option, Select, Typography } from '@material-tailwind/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {AiOutlineClose} from 'react-icons/ai'
-import { emitirAlerta } from '../auth/authentication'
+import { emitirAlerta, getComunities } from '../auth/authentication'
 import { useRouter } from 'next/navigation'
+import { useCookies } from 'react-cookie'
 
 const DialogAlert = ({ open, handler, userLoggedIn }) => {
     const [situacao, setSituacao] = useState('')
+    const [comunities, setComunities] = useState()
     const [tipo, setTipo] = useState('')
+    const [cookies, setCookie] = useCookies(['groupId'])
     const router = useRouter()
 
     const getId = () => {
@@ -15,11 +18,12 @@ const DialogAlert = ({ open, handler, userLoggedIn }) => {
         return numeroAleatorio
     }
 
+
     const handleEmit = async () => {
         if(!situacao) return
         if(!tipo) return
         let id = getId()
-        await emitirAlerta(id, tipo, situacao, userLoggedIn).then(() => {
+        await emitirAlerta(id, tipo, situacao, userLoggedIn, cookies.groupId).then(() => {
             router.push(`/app/chat/${id}`)
             handler()
         })

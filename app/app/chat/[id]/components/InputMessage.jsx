@@ -5,9 +5,9 @@ import {useEffect, useState} from 'react'
 import { useCookies } from "react-cookie"
 import { FieldValue, serverTimestamp } from "firebase/firestore"
 import { addDoc } from "firebase/firestore"
-import { getUserByUID } from "@/app/auth/authentication"
+import { getUserByUID } from "../../../../../app/auth/authentication"
 
-const InputMessage = ({ messageRef }) => {
+const InputMessage = ({ messageRef, id, groupId }) => {
     const [message, setMessage] = useState('')
     const [cookies, setCookie] = useCookies(['isAuth', 'user'])
     const [userLoggedIn, setUser] = useState('')
@@ -28,7 +28,8 @@ const InputMessage = ({ messageRef }) => {
             uid: cookies.user.uid,
             photoURL: userLoggedIn.photoURL || "",
             author: userLoggedIn.nickname,
-            groupId: "",
+            id: Number(id),
+            groupId: Number(groupId)
         }
         setMessage('')
         await addDoc(messageRef, payload)

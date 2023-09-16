@@ -4,7 +4,7 @@ import { Alert, Button, Card, CardBody, CardHeader, IconButton, Input, Tab, TabP
 import { useRef, useState } from "react"
 import {MdOutlineMailOutline, MdKey} from 'react-icons/md'
 import {FcGoogle} from 'react-icons/fc'
-import { entrarComGoogle, loginComEmailESenha, registrarComEmailESenha, verificarSeOEmailJaExiste, verificarSeOUsuarioJaExiste } from "@/app/auth/authentication"
+import { entrarComGoogle, loginComEmailESenha, registrarComEmailESenha, verificarSeOEmailJaExiste, verificarSeOUsuarioJaExiste } from "../../../app/auth/authentication"
 import {TbAlertCircleFilled} from 'react-icons/tb'
 
 const Form = ({ reload, setReload }) => {

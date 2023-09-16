@@ -4,23 +4,53 @@ import { Accordion, AccordionBody, AccordionHeader, Timeline, TimelineBody, Time
 import { useState } from "react"
 import {AiOutlinePlus, AiOutlineMinus} from 'react-icons/ai'
 import Alert from "./Alert"
+import {Alert as AlertUI} from '@material-tailwind/react'
+import { collection, orderBy, query } from "firebase/firestore"
+import { db } from "../../firebase"
+import { useCollection } from "react-firebase-hooks/firestore"
+import moment from "moment"
+import Nothing from "../../components/Nothing"
 
 const Alerts = () => {
+    const alertRef = collection(db, "alerts")
+    const q = query(alertRef, orderBy('createdAt', 'desc'))
+    const [alerts] = useCollection(q, {idField: 'id'})
+
+    const getHoursOrMinutesAgo = (createdAtNanos) => {
+        const now = moment(); // Data e hora atual
+        const createdAtSeconds = createdAtNanos / 1000000; // Convertendo nanossegundos para segundos
+        const createdAt = moment.unix(createdAtSeconds); // Data e hora da criação
+    
+        const duration = moment.duration(now.diff(createdAt));
+    
+        const hoursAgo = duration.hours();
+        const minutesAgo = duration.minutes();
+    
+        if (hoursAgo > 0) {
+            return `${hoursAgo} hora(s) atrás`;
+        } else {
+            return `${minutesAgo} minuto(s) atrás`;
+        }
+    };
     
     return (
-        <div>
+        <div className="">
             <div className="flex justify-between my-5">
                 <Typography className="font-bold text-[16px]">
                     Alertas Recentes
                 </Typography>
-                <Typography className="font-bold text-green-400 text-[16px] ">
-                    Ver todos
-                </Typography>
             </div>
             <div className="flex flex-col gap-4">
-                <Alert data={{"id": 1, "type": "Invasão", "hours": 5, "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquet leo id arcu elementum scelerisque. Nulla a eros eros. Mauris et vestibulum massa. Vivamus scelerisque enim a dui euismod iaculis. Etiam faucibus augue magna, a suscipit arcu sollicitudin eget. Suspendisse massa elit, placerat at dui vitae, luctus porta arcu."}} />
-                <Alert data={{"id": 2, "type": "Invasão", "hours": 5, "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquet leo id arcu elementum scelerisque. Nulla a eros eros. Mauris et vestibulum massa. Vivamus scelerisque enim a dui euismod iaculis. Etiam faucibus augue magna, a suscipit arcu sollicitudin eget. Suspendisse massa elit, placerat at dui vitae, luctus porta arcu."}} />
-                <Alert data={{"id": 3, "type": "Invasão", "hours": 5, "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquet leo id arcu elementum scelerisque. Nulla a eros eros. Mauris et vestibulum massa. Vivamus scelerisque enim a dui euismod iaculis. Etiam faucibus augue magna, a suscipit arcu sollicitudin eget. Suspendisse massa elit, placerat at dui vitae, luctus porta arcu."}} />
+                { alerts && alerts.docs.length > 0 ?
+                    <>     
+                    {alerts && alerts.docs.map((alert) => (
+                        <Alert data={{hours: getHoursOrMinutesAgo(alert.data().createdAt['nanoseconds']), situacao: alert.data().situacao, tipo: alert.data().tipo, details: alert.data().details}} key={alert.data().id} />
+                    ))}
+                    </>
+                    : <>
+                        <AlertUI color="light-blue">Atualmente não há nenhum alerta emitido em sua vizinhança.</AlertUI>
+                    </>
+               }
             </div>
         </div>
     )

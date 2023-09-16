@@ -3,7 +3,7 @@ import { Typography } from "@material-tailwind/react"
 import { useCookies } from "react-cookie"
 import { setState, useEffect, useState } from 'react'
 import moment from "moment/moment"
-import { getUserByUID } from "@/app/auth/authentication"
+import { getUserByUID } from "../../../../../app/auth/authentication"
 
 const Message = ({ text, uid, photoURL, name, createdAt }) => {
     const [cookies, setCookie] = useCookies(['isAuth', 'user'])
