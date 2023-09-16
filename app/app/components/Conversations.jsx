@@ -16,7 +16,6 @@ const Conversations = ({ groupId }) => {
         <>
             {loading ? (
                 <>
-                    <Loading />
                 </>
             ) : (
                 
