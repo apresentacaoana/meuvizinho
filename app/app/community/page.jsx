@@ -45,7 +45,7 @@ const ComunityHome = () => {
                                 </div>
                                 <List>
                                     <Typography variant="h4" className="mt-3">Participantes</Typography>
-                                    <ListItem onClick={() => router.push(`/app/chat/private/${comunity.creator.nickname.replace('@', '')}`)} className="w-full border shadow-md border-gray-400">
+                                    <ListItem className="w-full border shadow-md border-gray-400">
                                         <ListItemPrefix>
                                             <Avatar src={comunity.creator.photoURL} variant="circular" alt="pessoa" />
                                         </ListItemPrefix>
