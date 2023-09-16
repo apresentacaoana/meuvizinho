@@ -70,7 +70,7 @@ const FindPage = () => {
                                 <List className="gap-3">
                                     <Typography variant="h4">Vizinhanças disponíveis</Typography>
                                     {comunities.map((comunity) => (
-                                        <ListItem key={comunity.id} onClick={() => router.push(`/app/comunity/${comunity.id}`)} className="border border-blue-gray-500 shadow-md">
+                                        <ListItem key={comunity.id} onClick={() => router.push(`/app/community/${comunity.id}`)} className="border border-blue-gray-500 shadow-md">
                                             <ListItemPrefix>
                                                 <BsFillHouseFill color="#96FF81" size={30} />
                                             </ListItemPrefix>
