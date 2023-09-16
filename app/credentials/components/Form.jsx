@@ -77,10 +77,10 @@ const Form = ({ reload, setReload }) => {
             return
         }
         
-        if(!await verificarSeOEmailJaExiste(email)) {
-            setAlert('Essa conta não existe.')
-            return
-        }
+        // if(!await verificarSeOEmailJaExiste(email)) {
+        //     setAlert('Essa conta não existe.')
+        //     return
+        // }
 
         await loginComEmailESenha(email, password)
         setReload(reload + 1)

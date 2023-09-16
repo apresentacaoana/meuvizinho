@@ -78,7 +78,7 @@ export default function HorizontalCards({ userLoggedIn }) {
             "text_color": "#000000",
             "icon": <SlPeople size={25} />,
             "textone": "Procurar",
-            "texttwo": "Comunidade",
+            "texttwo": "Vizinhanças",
             "url": "/app/community/find"
           })
         }
@@ -92,7 +92,7 @@ export default function HorizontalCards({ userLoggedIn }) {
         "text_color": "#000000",
         "icon": <SlPeople size={25} />,
         "textone": "Criar",
-        "texttwo": "Comunidade",
+        "texttwo": "Vizinhança",
         "url": "/app/community/create"
       })
     }

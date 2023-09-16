@@ -68,7 +68,7 @@ const FindPage = () => {
                                 </Button>
                                 </div>
                                 <List className="gap-3">
-                                    <Typography variant="h4">Comunidades disponíveis</Typography>
+                                    <Typography variant="h4">Vizinhanças disponíveis</Typography>
                                     {comunities.map((comunity) => (
                                         <ListItem key={comunity.id} onClick={() => router.push(`/app/comunity/${comunity.id}`)} className="border border-blue-gray-500 shadow-md">
                                             <ListItemPrefix>
