@@ -40,12 +40,13 @@ const Form = () => {
 
     useEffect(() => {
         async function getUser() {
+            if(!cookies.user) return router.push("/credentials")
             const response = await getUserByUID(cookies.user.uid)
             setUser(await response)
             console.log(response)
         }
         getUser()
-    }, [])
+    }, [cookies.user])
 
     const handleCreate = async () => {
         if(!nome || !endereco) return

@@ -27,7 +27,7 @@ const RequestIdPage = ({ params }) => {
             // setLoading(false)
         }
         getData()
-    }, [reload])
+    }, [reload, params.id])
 
     const handleAccept = async (id) => {
         await aceitarSolicitacao(id)

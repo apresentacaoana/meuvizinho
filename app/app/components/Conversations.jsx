@@ -9,9 +9,7 @@ const Conversations = ({ groupId }) => {
     const [cookies, setCookie] = useCookies(['user, isAuth'])
     let userHavePhoto = null
     if(cookies.user) userHavePhoto = cookies.user.photoURL
-    setTimeout(() => {
-        setLoading(false)
-    }, 30);
+    
     return (
         <>
             {loading ? (

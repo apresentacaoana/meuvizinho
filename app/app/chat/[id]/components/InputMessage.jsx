@@ -13,12 +13,13 @@ const InputMessage = ({ messageRef, id, groupId }) => {
     const [userLoggedIn, setUser] = useState('')
 
     useEffect(() => {
+        if(!cookies.user) return router.push("/credentials")
         const getUser = async () => {
             const response = await getUserByUID(cookies.user.uid)
             await setUser(response)
         }
         getUser()
-    }, [])
+    }, [cookies.user])
 
     const sendMessage = async() => {
         if(!cookies.user || !message) return

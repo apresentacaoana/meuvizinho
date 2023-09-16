@@ -22,6 +22,7 @@ const IdPage = ({ params }) => {
 
     useEffect(() => {
         const getData = async () => {
+            if(!cookies.user) return router.push("/credentials")
             const responseComunity = await getComunityById(params.id)
             const responseRequests = await getSolicitacoesByComunityId(params.id)
             const responseUser = await getUserByUID(cookies.user.uid)

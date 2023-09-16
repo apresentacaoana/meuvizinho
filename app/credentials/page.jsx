@@ -23,7 +23,7 @@ const Credentials = () => {
             setCookie('user', user)
             if(user) router.push('/app')
         }, (error) => {})
-    }, [])
+    }, [cookies.user])
     return (
         <UI reload={reload} setReload={setRelaod} />
     )

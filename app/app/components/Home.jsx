@@ -22,12 +22,13 @@ const Home = () => {
 
   useEffect(() => {
     async function getUser() {
+      if(!cookies.user) return router.push("/credentials")
       const response = await getUserByUID(cookies.user.uid);
       setPerson(await response);
       setLoading(false);
     }
     getUser();
-  }, []);
+  }, [cookies.user]);
 
   return (
     <>

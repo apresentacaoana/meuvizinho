@@ -16,8 +16,14 @@ const ComunityHome = () => {
     const [loading, setLoading] = useState(true)
     const [comunity, setComunity] = useState({})
 
-    useMemo(() => {
+    useEffect(() => {
         const getData = async () => {
+            if(!cookies.user) {
+                router.push("/credentials")
+                setLoading(false)
+                return
+            }
+
             const response = await getUserByUID(cookies.user.uid)
             const responseComu = await getComunityByUser(cookies.user.uid)
             setUser(await response)
@@ -26,7 +32,7 @@ const ComunityHome = () => {
             setLoading(false)
         }
         getData()
-    }, [])
+    }, [cookies.user])
 
     return (
         <div>

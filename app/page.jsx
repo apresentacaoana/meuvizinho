@@ -15,7 +15,7 @@ export default function Home() {
       router.push('/credentials')
       return
     }
-  }, [])
+  }, [cookies.user])
   return (
     <div>
       <Button size='lg' onClick={logout} className=''>Encerrar sessão</Button>

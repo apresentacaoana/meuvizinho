@@ -25,7 +25,7 @@ const Chat = ({ params }) => {
             })
         }
         getAlerta()
-    }, [])
+    }, [cookies.groupId])
 
 
     return (

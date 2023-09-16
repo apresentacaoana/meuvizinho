@@ -19,6 +19,7 @@ const RequestPage = () => {
     
     useEffect(() => {
         const getData = async () => {
+            if(!cookies.user) return router.push("/credentials")
             await getUserByUID(cookies.user.uid).then(async (res) => {
                 setUser(res)
                 console.log(res)
@@ -28,7 +29,7 @@ const RequestPage = () => {
             })
         }
         getData()
-    }, [])
+    }, [cookies.user])
 
     return (
         <>

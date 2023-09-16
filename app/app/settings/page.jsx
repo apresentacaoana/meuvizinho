@@ -28,7 +28,7 @@ const SettingsPage = () => {
             })
         }
         getData()
-    }, [])
+    }, [cookies.user])
 
     const handleSave = async (e) => {
         if (e.target.files[0]) {
