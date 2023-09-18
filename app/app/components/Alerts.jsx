@@ -17,6 +17,7 @@ const Alerts = () => {
     const [alerts] = useCollection(q, {idField: 'id'})
 
     const getHoursOrMinutesAgo = (createdAtNanos) => {
+        console.log(createdAtNanos)
         const now = moment(); // Data e hora atual
         const createdAtMilliseconds = createdAtNanos / 1000000; // Convertendo nanossegundos para milissegundos
         const createdAt = moment(createdAtMilliseconds); // Data e hora da criação

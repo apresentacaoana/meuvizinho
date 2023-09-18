@@ -497,7 +497,6 @@ const addMembersByRadius = async (id) => {
 
 const updateUser = async (user, data) => {
     try {
-        console.log(user)
         const docRef = doc(db, "users", user.docId);
         let object = {
             ...data
@@ -507,6 +506,19 @@ const updateUser = async (user, data) => {
 
         await updateDoc(docRef, object);
     } catch(e) {}
+}
+
+const report = async (user, alert, details) => {
+    try {
+        const reportRef = collection(db, "reports")
+        await addDoc(reportRef, {
+            user,
+            alert,
+            reported: alert.author,
+            createdAt: new Date(),
+            details
+        })
+    } catch (e) {}
 }
 
 export {
@@ -539,5 +551,6 @@ export {
     getSolicitacoesByUser,
     updateUser,
     getUsers,
-    addMembersByRadius
+    addMembersByRadius,
+    report
 }
