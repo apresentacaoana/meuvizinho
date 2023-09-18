@@ -24,7 +24,7 @@ const loginComEmailESenha = async (email, senha) => {
 //     return messages
 // }
 
-const registrarComEmailESenha = async(name, email, pwd, city, bairro, state, country, address_number, street, coords) => {
+const registrarComEmailESenha = async(name, email, pwd, city, bairro, state, country, address_number, street) => {
     try {
         console.log(city,bairro,state,country,address_number,street)
         const res = await createUserWithEmailAndPassword(auth, email, pwd)
@@ -41,8 +41,8 @@ const registrarComEmailESenha = async(name, email, pwd, city, bairro, state, cou
             gender: "",
             nacionality: "",
             birthofday: "",
-            latitude: coords.latitude,
-            longitude: coords.longitude,
+            latitude: 0,
+            longitude: 0,
             city: city,
             bairro: bairro,
             state: state,
