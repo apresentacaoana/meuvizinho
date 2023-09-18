@@ -7,7 +7,7 @@ import {IoMdPin} from 'react-icons/io'
 import {CountryRegionData} from 'react-country-region-selector'
 import { Autocomplete, TextField } from "@mui/material"
 import axios from "axios"
-import { createComunity, getUserByUID } from "../../../../auth/authentication"
+import { addMembersByRadius, createComunity, getComunityById, getUserByUID } from "../../../../auth/authentication"
 import { useCookies } from "react-cookie"
 
 const Form = () => {
@@ -16,6 +16,7 @@ const Form = () => {
     const [endereco, setEndereco] = useState('')
     const [userLoggedIn, setUser] = useState({})
     const [cookies, setCookie] = useCookies(['isAuth', 'user'])
+    const [radius, setRadius] = useState()
 
     const router = useRouter()
 
@@ -50,8 +51,22 @@ const Form = () => {
 
     const handleCreate = async () => {
         if(!nome || !endereco) return
-        await createComunity(nome, endereco, userLoggedIn, getId())
+        let id = getId()
+        await createComunity(nome, endereco, userLoggedIn, id, Number(radius)).then(async res => {
+            console.log(id)
+            if(radius > 0) await addMembersByRadius(id)
+        })
         router.push('/app/community')
+    }
+
+    const handleChange = (e) => {
+        const inputValue = e.target.value;
+    
+        if(inputValue > 500) setRadius(500)
+
+        if (!isNaN(inputValue) && inputValue >= 0 && inputValue <= 500) {
+          setRadius(inputValue);
+        }
     }
 
 
@@ -81,6 +96,7 @@ const Form = () => {
                                 return (<TextField {...params} value={endereco} onInput={e =>  getOptions(e.target.value)}  label="Endereço" />)
                             }}
                         />
+                        <Input size="lg" type="number" value={radius} onChange={(e) => handleChange(e)} label="Adicionar usuários em um raio de (metros)" />
                     </div>
                     <Button onClick={handleCreate} className={'w-full'} color="green">Criar</Button>
                 </form>

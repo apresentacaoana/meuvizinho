@@ -10,11 +10,16 @@ import Welcome from './Welcome';
 import DialogUserName from '../../../app/components/DialogUsername';
 import { Spinner } from '@material-tailwind/react';
 import Loading from '../../../app/components/Loading';
+import { useRouter } from 'next/navigation';
+import verifierProps from "../../actions/user"
+import Notification from './Notification'
 
 const Home = () => {
   const [cookies, setCookie] = useCookies(['user, isAuth']);
   const [person, setPerson] = useState({});
   const [open, setOpen] = useState(false);
+  const [notification, setNotification] = useState('')
+  const router = useRouter()
   const [loading, setLoading] = useState(true);
 
   let userHavePhoto = null;
@@ -23,9 +28,9 @@ const Home = () => {
   useEffect(() => {
     async function getUser() {
       if(!cookies.user) return router.push("/credentials")
-      const response = await getUserByUID(cookies.user.uid);
-      setPerson(await response);
-      setLoading(false);
+        const response = await getUserByUID(cookies.user.uid);
+        setPerson(await response);
+        setLoading(false);
     }
     getUser();
   }, []);
@@ -48,6 +53,7 @@ const Home = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <Welcome user={person} />
+            <Notification type={verifierProps(person)} />
             <HorizontalCards userLoggedIn={person} />
           </motion.div>
           <motion.div

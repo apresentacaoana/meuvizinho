@@ -31,7 +31,7 @@ const ChatRoom = ({ id }) => {
                         {msg.data().groupId == cookies.groupId  && (
                             <>
                                 {msg.data().id == Number(id) && (
-                                            <Message name={msg.data().author} key={msg.id} text={msg.data().text} photoURL={msg.data().photoURL} createdAt={msg.data().createdAt} uid={msg.data().uid} />    
+                                    <Message role={msg.data().role} name={msg.data().author} key={msg.id} text={msg.data().text} photoURL={msg.data().photoURL} createdAt={msg.data().createdAt} uid={msg.data().uid} />    
                                 )}
                             </>
                         )}

@@ -6,6 +6,8 @@ import {MdOutlineMailOutline, MdKey} from 'react-icons/md'
 import {FcGoogle} from 'react-icons/fc'
 import { entrarComGoogle, loginComEmailESenha, registrarComEmailESenha, verificarSeOEmailJaExiste, verificarSeOUsuarioJaExiste } from "../../../app/auth/authentication"
 import {TbAlertCircleFilled} from 'react-icons/tb'
+import Loading from "../../components/Loading"
+import { useRouter } from "next/navigation"
 
 const Form = ({ reload, setReload }) => {
     const [type, setType] = useState('signin')
@@ -13,27 +15,46 @@ const Form = ({ reload, setReload }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [loading, setLoading] = useState(false)
     const [alert, setAlert] = useState('')
+    const [city, setCity] = useState('')
+    const [bairro, setBairro] = useState('')
+    const [street, setStreet] = useState('')
+    const [number, setNumber] = useState('')
+    const [state, setState] = useState('')
+    const [alerta, setAlerta] = useState('')
+    const [genero, setGenero] = useState('')
+    const [nacionalidade, setNacionalidade] = useState('')
+    const [dataDeNascimento, setDataDeNascimento] = useState('')
+    const [country, setCountry] = useState('')
     
+    const router = useRouter()
+
     const isSignIn = type === 'signin'
     const isNullOrWhiteSpaces = (thing) => {
         if(thing === null || thing.replaceAll(' ', '').length < 1) return true
         return false
     }
 
+    const handleOnChangeJustNumber = (e) => {
+        let regex = /^(\d+)?$/
+        if(regex.test(e)) setNumber(e)
+
+    }
+
     const handleSignUp = async (e) => {
         e.preventDefault()
         setAlert('')
-
-        console.log(isNullOrWhiteSpaces(name))
-        console.log(isNullOrWhiteSpaces(email))
-        console.log(isNullOrWhiteSpaces(password))
-        console.log(isNullOrWhiteSpaces(confirmPassword))
-
         if(isNullOrWhiteSpaces(name)
            || isNullOrWhiteSpaces(email)
            || isNullOrWhiteSpaces(password)
            || isNullOrWhiteSpaces(confirmPassword)
+           || isNullOrWhiteSpaces(city)
+           || isNullOrWhiteSpaces(bairro)
+           || isNullOrWhiteSpaces(street)
+           || isNullOrWhiteSpaces(number)
+           || isNullOrWhiteSpaces(state)
+           || isNullOrWhiteSpaces(country)
         ) {
             setAlert('Você não pode deixar campos vazios.')
             return
@@ -58,15 +79,17 @@ const Form = ({ reload, setReload }) => {
             setAlert('Já existe uma conta com esse email')
             return
         }
+        setLoading(true)
 
-        await registrarComEmailESenha(name, email, password)
-        // await loginComEmailESenha(email, password)
+        await registrarComEmailESenha(name, email, password, city, bairro, state, country, number, street)
+        router.push('/app')
+        setLoading(false)
         setReload(reload + 1)
-
     }
 
     
     const handleSignIn = async (e) => {
+        setLoading(true)
         e.preventDefault()
         setAlert('')
 
@@ -77,26 +100,32 @@ const Form = ({ reload, setReload }) => {
             return
         }
         
-        // if(!await verificarSeOEmailJaExiste(email)) {
-        //     setAlert('Essa conta não existe.')
-        //     return
-        // }
+        
+        if(await !verificarSeOEmailJaExiste(email)) {
+            setAlert('Essa conta não existe.')
+            return
+        }
 
-        await loginComEmailESenha(email, password)
-        setReload(reload + 1)
+        await loginComEmailESenha(email, password).catch(err => {
+            setAlert('Senha errada')
+        })
+        setLoading(false)
 
     }
 
     return (
-        
-        <div className="w-full flex items-center justify-center lg:w-1/2">
+        <>
+            {loading ? (
+                <Loading />
+            ) : (
+                <div className="w-full flex items-center justify-center lg:w-1/2">
 
 
 
-            <div className='h-full md:h-[910px] sm:w-full md:max-w-[700px] sm:px-5 md:px-10 sm:py-[50px] md:py-20 rounded-3xl flex flex-col bg-white border-2 border-gray-100'>
+            <div className='h-auto sm:w-full md:max-w-[700px] sm:px-5 md:px-10 sm:py-[50px] md:py-20 rounded-3xl flex flex-col bg-white border-2 border-gray-100'>
 
                 
-                <Tabs value={type} className="overflow-visible w-full flex flex-col">
+                <Tabs value={type} className="overflow-visible  sm:mt-[0] w-full flex flex-col">
 
                     <TabsHeader className="relative z-0 mt-6 md:-mt-5 w-[15rem] md:w-[25rem] left-1/2 -translate-x-1/2">
                         <Tab value="signin" onClick={() => {setType("signin"); setAlert('')}}>
@@ -122,7 +151,7 @@ const Form = ({ reload, setReload }) => {
                         }}
                     >
                         {isSignIn ? (
-                            <TabPanel value={"signin"} className="!overflow-hidden">
+                            <TabPanel value={"signin"} className="">
                                 {alert && (<Alert className="bg-[#F25C5C] mb-4" icon={<TbAlertCircleFilled size={24} />}>{alert}</Alert>)}
                                 
                                 <form action="">
@@ -171,7 +200,7 @@ const Form = ({ reload, setReload }) => {
                                 </form>
                             </TabPanel>
                         ) : (
-                            <TabPanel value={"signup"}>
+                            <TabPanel value={"signup"} className="">
                             {alert && (<Alert className="bg-[#F25C5C] mb-4" icon={<TbAlertCircleFilled size={24} />}>{alert}</Alert>)}
                             <h1 className='text-5xl font-semibold md:mt-6 sm:-mt-2'>Faça parte da vizinhança!</h1>
                             <p className='font-medium text-lg text-gray-500 mt-4'>Insira suas informações.</p>
@@ -210,6 +239,50 @@ const Form = ({ reload, setReload }) => {
                                         type={"password"}
                                     />
                                 </div>
+                                <hr className="mt-3" />
+                                <div className="flex flex-col mt-3 gap-2">
+                                    <label className='text-lg font-medium'>Endereço</label>
+                                    <input 
+                                        value={street}
+                                        onChange={(e) => setStreet(e.target.value)}
+                                        type="text"
+                                        className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
+                                        placeholder="Insira seu endereço"/>
+
+                                    <input 
+                                        value={number}
+                                        onChange={(e) => handleOnChangeJustNumber(e.target.value)}
+                                        className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
+                                        placeholder="Insira o Nº da residência"/>
+                                    <input 
+                                        value={bairro}
+                                        onChange={(e) => setBairro(e.target.value)}
+                                        type="text"
+                                        className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
+                                        placeholder="Insira seu bairro"/>
+                                    <input 
+                                        value={city}
+                                        onChange={(e) => setCity(e.target.value)}
+                                        type="text"
+                                        className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
+                                        placeholder="Insira sua cidade"/>
+                                    <input 
+                                        value={state}
+                                        onChange={(e) => setState(e.target.value)}
+                                        type="text"
+                                        className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
+                                        placeholder="Insira seu estado"/>
+                                    <input 
+                                        value={country}
+                                        onChange={(e) => setCountry(e.target.value)}
+                                        type="text"
+                                        className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
+                                        placeholder="Insira seu país"/>
+                                </div>
+                                
+
+
+
                                 <div className='mt-2 flex justify-between items-center'>
                                     <button className='font-medium text-base text-violet-500 justify-self-end'>Esqueci a senha</button>
                                 </div>
@@ -246,6 +319,8 @@ const Form = ({ reload, setReload }) => {
 
             
         </div>
+            )}
+        </>
     )
 }
 

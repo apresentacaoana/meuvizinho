@@ -5,6 +5,7 @@ import { limitToFirst } from "firebase/database"
 import { useCookies } from "react-cookie"
 import { useCollection } from 'react-firebase-hooks/firestore'
 import {getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import calcularDistancia from "../actions/location"
 
 const googleProvider = new GoogleAuthProvider()
 
@@ -23,8 +24,9 @@ const loginComEmailESenha = async (email, senha) => {
 //     return messages
 // }
 
-const registrarComEmailESenha = async(name, email, pwd) => {
+const registrarComEmailESenha = async(name, email, pwd, city, bairro, state, country, address_number, street, coords) => {
     try {
+        console.log(city,bairro,state,country,address_number,street)
         const res = await createUserWithEmailAndPassword(auth, email, pwd)
         const user = res.user
         await addDoc(collection(db, "users"), {
@@ -34,7 +36,22 @@ const registrarComEmailESenha = async(name, email, pwd) => {
             email,
             photoURL: "",
             nickname: "",
-            role: "common"
+            verified: false,
+            submissionId: "",
+            gender: "",
+            nacionality: "",
+            birthofday: "",
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            city: city,
+            bairro: bairro,
+            state: state,
+            country: country,
+            address_number: address_number,
+            plan: "free",
+            buyAt: "",
+            role: "common",
+            street: street
         })
     } catch(e) {
         console.log(e)
@@ -86,7 +103,10 @@ const getUserByUID = async (uid) => {
         const docs = await getDocs(q)
         let response = {}
         docs.forEach((doc) => {
-            if(doc.data().uid == uid) response = doc.data()
+            if(doc.data().uid == uid) response = {
+                ...doc.data(),
+                docId: doc.id
+            }
         })
     
         return response
@@ -146,7 +166,24 @@ const entrarComGoogle = async () => {
                 email: user.email,
                 photoURL: user.photoURL,
                 nickname: "",
-                role: "common"
+                role: "common",
+                verified: false,
+                submissionId: "",
+                gender: "",
+                nacionality: "",
+                birthofday: "",
+                city: "",
+                bairro: "",
+                plan: "free",
+                buyAt: "",
+                state: "",
+                latitude: 0,
+                longitude: 0,
+                country: "",
+                address_number: "",
+                street: ""
+                
+                
             })
         }
     } catch (e) {
@@ -287,17 +324,21 @@ const addMember = async (user, id) => {
     }
 }
 
-const createComunity = async (name, address, user, id) => {
+const createComunity = async (name, address, user, id, radius) => {
     try {
-        await addDoc(collection(db, "comunities"), {
+        const doc = await addDoc(collection(db, "comunities"), {
             name,
             address,
             creator: user,
             members: [],
             alerts: [],
+            radius, 
             id,
             createdAt: new Date()
         })
+        return {
+            id: doc.id
+        }
     } catch (e) {
 
     }
@@ -312,7 +353,7 @@ const emitirAlerta = async (id, tipo, situacao, userLoggedIn, groupId, details =
             createdAt: new Date(),
             groupId,
             uid: userLoggedIn.uid,
-            author: userLoggedIn.nickname,
+            author: userLoggedIn,
             details,
             messages
         })
@@ -418,24 +459,53 @@ const getSolicitacoesByComunityId = async (id) => {
     } catch(e) {}
 }
 
-const uploadImage = async (file, user) => {
+const getUsers = async () => {
     try {
+        const users = collection(db, "users")
+        const q = query(users)
+        const docs = await getDocs(q)
+        let response = []
+        docs.forEach((doc) => {
+            response.push(doc.data())
+        })
+
         
-        const buffer = Buffer.from(await file.arrayBuffer())
-        const filename = `/public/profiles/${user.id}/photo.jpg`
+        return response
+    } catch (e) {
 
-        const storage = getStorage(); // Obtenha a referência do armazenamento
-        const storageRef = ref(storage, filename);
-        await uploadBytes(storageRef, buffer);
+    }
+}
 
-        // Obtenha o URL da imagem após o upload bem-sucedido
-        const photoURL = await getDownloadURL(storageRef);
+const addMembersByRadius = async (id) => {
+    try {
+        const community = await getComunityById(id)
+        const users = await getUsers()
+        console.log(users)
+        users.forEach(async (user) => {
+            const distance = calcularDistancia(community.creator.latitude, community.creator.longitude, user.latitude, user.longitude)
+            console.log(distance.km, distance.metros)
+            if(user.role == 'police' && distance.km <= 10) {
+                await addMember(user, community.id)
+            }
+            if(distance.metros <= community.radius && user.uid !== community.creator.uid && user.role !== 'police') {
+                console.log(user)
+                await addMember(user, community.id)
+            }
+        })
+    } catch (e) {}
+}
 
-        // Atualize o campo 'photoURL' no Firestore com o URL da imagem
+const updateUser = async (user, data) => {
+    try {
+        console.log(user)
         const docRef = doc(db, "users", user.docId);
-        await updateDoc(docRef, {
-            "photoURL": photoURL
-        });
+        let object = {
+            ...data
+        }
+
+        if(data.nickname) object['nickname'] = "@" + data.nickname
+
+        await updateDoc(docRef, object);
     } catch(e) {}
 }
 
@@ -467,5 +537,7 @@ export {
     excluirSolicitacao,
     recusarSolicitacao,
     getSolicitacoesByUser,
-    uploadImage
+    updateUser,
+    getUsers,
+    addMembersByRadius
 }

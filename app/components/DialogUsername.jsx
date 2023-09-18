@@ -53,8 +53,9 @@ const DialogUserName = ({ open, setOpen, userLoggedIn }) => {
             setAlert('Este @ já está em uso')
             return
         }
-        await registerNickname(cookies.user.uid, "@" + nickname)
+        await registerNickname(cookies.user.uid, "@" + nickname.toLowerCase())
         setOpen(false)
+        setReload(reload + 1)
 
     }
 

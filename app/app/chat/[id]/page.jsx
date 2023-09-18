@@ -36,7 +36,7 @@ const Chat = ({ params }) => {
             ) : (
                 
             <div>
-                <Header alert={alerta} />
+                <Header userLoggedIn={alerta.author} alert={alerta} />
                 <div className="xl:mx-80 md:my-[20px] m-5">
                     <Alert author={alerta.author} situacao={alerta.situacao} />
                 </div>

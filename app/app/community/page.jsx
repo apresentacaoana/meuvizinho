@@ -55,13 +55,15 @@ const ComunityHome = () => {
                                         <ListItemPrefix>
                                             <Avatar src={comunity.creator.photoURL} variant="circular" alt="pessoa" />
                                         </ListItemPrefix>
-                                        <div>
-                                            <Typography variant="h6" className="flex gap-3" color="blue-gray">
-                                            {comunity.creator.name} <Chip variant="ghost" color="light-green" size="sm" value={"SÍNDICO"} className="w-fit"  icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />}/>
-                                            </Typography>
-                                            <Typography variant="small" color="gray" className="font-normal">
-                                            {comunity.creator.nickname}
-                                            </Typography>
+                                        <div className="flex items-center gap-5">
+                                            <div>
+                                                <Typography variant="h6" className="flex gap-3" color="blue-gray">
+                                                {comunity.creator.name} </Typography>
+                                                <Typography variant="small" color="gray" className="font-normal">
+                                                {comunity.creator.nickname}
+                                                </Typography>
+                                            </div>
+                                            <Chip variant="ghost" color="light-green" size="sm" value={"SÍNDICO"} className="w-fit mb-3 self-start justify-self-start"  icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />}/>
                                         </div>
                                     </ListItem> 
                                     {comunity.members.map((member) => (
@@ -69,13 +71,16 @@ const ComunityHome = () => {
                                             <ListItemPrefix>
                                                 <Avatar src={member.photoURL} variant="circular" alt="pessoa" />
                                             </ListItemPrefix>
-                                            <div>
-                                                <Typography variant="h6" className="flex gap-3" color="blue-gray">
-                                                {member.name}
-                                                </Typography>
-                                                <Typography variant="small" color="gray" className="font-normal">
-                                                {member.nickname}
-                                                </Typography>
+                                            <div className="flex items-center gap-5">
+                                                <div>
+                                                    <Typography variant="h6" className="flex gap-3" color="blue-gray">
+                                                        {member.name} 
+                                                    </Typography>
+                                                    <Typography variant="small" color="gray" className="font-normal">
+                                                        {member.nickname}
+                                                    </Typography>
+                                                </div>
+                                                { member.role === 'police' && <Chip variant="ghost" color="gray" size="sm" value={`POLICIAL`} className="w-fit mb-3 self-start justify-self-start" icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-yellow-900 content-['']" />} />}
                                             </div>
                                         </ListItem> 
                                     ))}

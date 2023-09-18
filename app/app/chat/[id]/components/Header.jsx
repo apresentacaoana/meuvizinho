@@ -1,8 +1,9 @@
-import { Typography } from '@material-tailwind/react'
+import { IconButton, Typography } from '@material-tailwind/react'
 import { useRouter } from 'next/navigation'
 import {BsArrowLeftShort} from 'react-icons/bs'
+import {RiPoliceCarLine} from 'react-icons/ri'
 
-const Header = ({ alert }) => {
+const Header = ({ alert, userLoggedIn }) => {
     const router = useRouter()
     const situacao = {
         "assalto": "Assalto",
@@ -17,6 +18,12 @@ const Header = ({ alert }) => {
             <Typography variant='h4' className='flex-grow text-center'>
                 Alerta de {situacao[alert.situacao]}
             </Typography>
+            {userLoggedIn.role == 'police' && (
+                
+                <IconButton className='absolute' >
+                    <RiPoliceCarLine size={25} />
+                </IconButton>
+            )}
         </div>
     )
 }

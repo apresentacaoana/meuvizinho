@@ -10,6 +10,7 @@ import DialogAlert from '../../../app/components/DialogAlert'
 import { useCookies } from 'react-cookie'
 import DialogAlertGroup from '../../components/DialogAlertGroup'
 import {BiGitPullRequest} from 'react-icons/bi'
+import {LuMailWarning} from 'react-icons/lu'
 
 
 export default function HorizontalCards({ userLoggedIn }) {
@@ -27,14 +28,6 @@ export default function HorizontalCards({ userLoggedIn }) {
   const cardsF = () => {
     let cardsRaw = [
       {
-        "color": "#EAFEAB",
-        "text_color": "#000000",
-        "icon": <SlPeople size={25} />,
-        "textone": "Minha",
-        "texttwo": "Vizinhança",
-        "url": "/app/community"
-      },
-      {
         "color": "#E8FFEB",
         "text_color": "#000000",
         "icon": <GoGear size={25} />,
@@ -42,16 +35,53 @@ export default function HorizontalCards({ userLoggedIn }) {
         "texttwo": "Configurações",
         "url": "/app/settings"
       },
-      {
+    ]
+
+    if(userLoggedIn.plan == 'free') {
+      cardsRaw.push({
+        "color": "#DFF1FF",
+        "text_color": "#000000",
+        "icon": <BsCashCoin size={25} />,
+        "textone": "Adquirir",
+        "texttwo": "Assinatura",
+        "url": "/app/plan/buy"
+      })
+    } else {
+      cardsRaw.push({
         "color": "#DFF1FF",
         "text_color": "#000000",
         "icon": <BsCashCoin size={25} />,
         "textone": "Minha",
         "texttwo": "Assinatura",
-        "url": "/app/subscription"
-      },
-    ]
+        "url": "/app/plan"
+      })
+    }
+
+    if(userLoggedIn.role == 'admin') {
+      cardsRaw.push({
+        "color": "#FFE344",
+        "text_color": "#000000",
+        "icon": <LuMailWarning size={25} />,
+        "textone": "Caixa de",
+        "texttwo": "Denúncias",
+        "url": "/app/admin/reports"
+      })
+    }
     
+    
+    if(cookies.groupId) {
+      cardsRaw.push(
+        {
+          "color": "#EAFEAB",
+          "text_color": "#000000",
+          "icon": <SlPeople size={25} />,
+          "textone": "Minha",
+          "texttwo": "Vizinhança",
+          "url": "/app/community"
+        }
+      )
+    }
+
     if(userLoggedIn.role =='sindicate' && cookies.groupId !== null) {
       cardsRaw.push({
         "color": "#C59BFF",

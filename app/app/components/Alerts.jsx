@@ -18,20 +18,24 @@ const Alerts = () => {
 
     const getHoursOrMinutesAgo = (createdAtNanos) => {
         const now = moment(); // Data e hora atual
-        const createdAtSeconds = createdAtNanos / 1000000; // Convertendo nanossegundos para segundos
-        const createdAt = moment.unix(createdAtSeconds); // Data e hora da criação
-    
+        const createdAtMilliseconds = createdAtNanos / 1000000; // Convertendo nanossegundos para milissegundos
+        const createdAt = moment(createdAtMilliseconds); // Data e hora da criação
+        
         const duration = moment.duration(now.diff(createdAt));
-    
+        
         const hoursAgo = duration.hours();
         const minutesAgo = duration.minutes();
+        const secondsAgo = duration.seconds();
     
         if (hoursAgo > 0) {
             return `${hoursAgo} hora(s) atrás`;
-        } else {
+        } else if (minutesAgo > 0) {
             return `${minutesAgo} minuto(s) atrás`;
+        } else {
+            return `${secondsAgo} segundo(s) atrás`;
         }
     };
+    
     
     return (
         <div className="">
@@ -44,7 +48,7 @@ const Alerts = () => {
                 { alerts && alerts.docs.length > 0 ?
                     <>     
                     {alerts && alerts.docs.map((alert) => (
-                        <Alert data={{hours: getHoursOrMinutesAgo(alert.data().createdAt['nanoseconds']), situacao: alert.data().situacao, tipo: alert.data().tipo, details: alert.data().details}} key={alert.data().id} />
+                        <Alert data={{author: alert.data().author, hours: getHoursOrMinutesAgo(alert.data().createdAt['nanoseconds']), situacao: alert.data().situacao, tipo: alert.data().tipo, details: alert.data().details}} key={alert.data().id} />
                     ))}
                     </>
                     : <>

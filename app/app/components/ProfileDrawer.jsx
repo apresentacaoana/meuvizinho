@@ -1,17 +1,31 @@
 'use client'
-import { logout } from "../../../app/auth/authentication"
-import { Drawer, IconButton, List, ListItem, ListItemPrefix, Typography } from "@material-tailwind/react"
+import { getUserByUID, logout } from "../../../app/auth/authentication"
+import { Avatar, Badge, Card, Chip, Drawer, IconButton, List, ListItem, ListItemPrefix, Typography } from "@material-tailwind/react"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { useCookies } from "react-cookie"
+import { BsGearFill, BsPinFill, BsPinMap } from "react-icons/bs"
 
 const ProfileDrawer = ({open, handleClose}) => {
     const [cookies, setCookie] = useCookies(['user, isAuth'])
     const router = useRouter()
+    const [userLoggedIn, setUser] = useState({})
     const encerrarSessao = () => {
         logout()
         setCookie('user', null)
         setCookie('isAuth', null)
     }
+
+    useEffect(() => {
+      const getData = async () => {
+        await getUserByUID(cookies.user.uid).then(async (res) => {
+            setUser(await res)
+
+        })
+      }
+      getData()
+    }, [])
+
     return (
     <Drawer placement="right" open={open} onClose={handleClose}>
         <div className="mb-2 flex items-center justify-between p-4">
@@ -36,22 +50,22 @@ const ProfileDrawer = ({open, handleClose}) => {
           </IconButton>
         </div>
         <List>
-          <ListItem>
-            <ListItemPrefix>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="h-5 w-5"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </ListItemPrefix>
-            Perfil
+          <ListItem onClick={() => {
+            router.push('/app/settings/profile')
+          }}>
+            <Card className="p-5 w-full border justify-between border-gray-200 flex flex-row items-center">
+              
+              <ListItemPrefix>
+                <Badge overlap="circular" placement="bottom-end" color="green">
+                  <Avatar className="border-[2px] border-green-400" src={userLoggedIn.photoURL} />
+                </Badge>
+              </ListItemPrefix>
+              <div className="flex-grow flex flex-col gap-1 ">
+                <Chip size="sm" value={userLoggedIn.nickname} className="lowercase w-fit" variant="ghost" color="light-green" />
+                <Typography className="text-[13px] font-bold">{userLoggedIn.name}</Typography>
+              </div>
+              <BsGearFill size={15} />
+            </Card>
           </ListItem>
           {/* <ListItem>
             <ListItemPrefix>

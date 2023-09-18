@@ -10,15 +10,21 @@ import { useEffect } from 'react'
 export default function Home() {
   const [cookies, setCookie] = useCookies(['user'])
   const router = useRouter()
+
+  function encerrarSessao() {
+    logout()
+    setCookie("user", null)
+  }
+
   useEffect(() => {
-    if(!cookies.user) {
+    if(cookies.user == null) {
       router.push('/credentials')
       return
     }
   }, [])
   return (
     <div>
-      <Button size='lg' onClick={logout} className=''>Encerrar sessão</Button>
+      <Button size='lg' onClick={encerrarSessao} className=''>Encerrar sessão</Button>
     </div>
   )
 }

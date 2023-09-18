@@ -48,13 +48,13 @@ const Alert = ({ data }) => {
                         <TimelineHeader className="h-3">
                             <TimelineIcon />
                             <Typography variant="h6" color="blue-gray" className="leading-none">
-                                Relatos do alarme
+                                Onde este alarme foi emitido?
                             </Typography>
                         </TimelineHeader>
                         
                         <TimelineBody className="">
                             <Typography variant="small" className="font-normal text-gray-600">
-                                {data.details}
+                                {data.author.street}, {data.author.address_number}. {data.author.city}, {data.author.state}.
                             </Typography>
                         </TimelineBody>
                     </TimelineItem>

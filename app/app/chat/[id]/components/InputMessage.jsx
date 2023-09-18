@@ -29,6 +29,7 @@ const InputMessage = ({ messageRef, id, groupId }) => {
             uid: cookies.user.uid,
             photoURL: userLoggedIn.photoURL || "",
             author: userLoggedIn.nickname,
+            role: userLoggedIn.role,
             id: Number(id),
             groupId: Number(groupId)
         }
