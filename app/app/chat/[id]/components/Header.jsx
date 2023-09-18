@@ -1,3 +1,4 @@
+'use client'
 import { IconButton, Tooltip, Typography } from '@material-tailwind/react'
 import { useRouter } from 'next/navigation'
 import {BsArrowLeftShort} from 'react-icons/bs'
