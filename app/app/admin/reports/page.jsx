@@ -11,6 +11,11 @@ import moment from 'moment/moment'
 
 const ReportsAdminPage = () => {
 
+    const getId = () => {
+        const numeroAleatorio = Math.floor(Math.random() * 99999) + 1000
+        return numeroAleatorio
+    }
+
     const reportsRef = collection(db, "reports")
     const q = query(reportsRef, orderBy("createdAt", "desc"))
     const [reports] = useCollection(q, {idField: "alert.id"})
@@ -41,7 +46,7 @@ const ReportsAdminPage = () => {
             <div className="xl:mx-80 md:my-[70px] m-5">
                 <List className="mt-[4rem] gap-3">
                     {reports && reports.docs.map((report) => (
-                    <ListItem className="bg-red-200 border border-red-400 shadow-md text-white ">
+                    <ListItem key={getId()} className="bg-red-200 border border-red-400 shadow-md text-white ">
                         <ListItemPrefix className="self-start">
                             <TbReport size={32} />
                         </ListItemPrefix>
