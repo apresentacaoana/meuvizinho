@@ -45,6 +45,7 @@ const DialogUserName = ({ open, setOpen, userLoggedIn }) => {
     }
 
     let handleCreate = async (e) => {
+        handler()
         setAlert('')
         e.preventDefault()
         if(!nickname) return
@@ -54,9 +55,8 @@ const DialogUserName = ({ open, setOpen, userLoggedIn }) => {
             return
         }
         await registerNickname(cookies.user.uid, "@" + nickname.toLowerCase())
-        setOpen(false)
         setReload(reload + 1)
-
+        setOpen(false)
     }
 
     return (
