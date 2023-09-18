@@ -38,7 +38,7 @@ const Chats = ({ groupId }) => {
             <List className="gap-4">
                 {alerts && alerts.docs.length > 0 ? alerts.docs.map(alert => (
                     <>
-                        {alert.data().groupId == Number(groupId) && (
+                        {isInRadiusArea && (
                         
                             <ListItem key={Math.floor(Math.random() * 9999) + 1000} className="bg-[#FFC9C6] border border-red-800 shadow-md" onClick={() => router.push(`/app/chat/${alert.data().id}`)}>
                                 <ListItemPrefix>
