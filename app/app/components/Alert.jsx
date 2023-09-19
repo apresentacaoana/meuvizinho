@@ -1,11 +1,13 @@
 'use client'
 import { Accordion, AccordionBody, AccordionHeader, Timeline, TimelineBody, TimelineConnector, TimelineHeader, TimelineIcon, TimelineItem, Typography } from "@material-tailwind/react"
+import moment from "moment"
 import { useState } from "react"
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"
 
 const Alert = ({ data }) => {
     const [open, setOpen] = useState(0)
     const handleOpen = value => setOpen(open === value ? 0 : value)
+    let timestamp = moment.unix(data.hours).format('LT')
 
     const tipoParse = {
         "ocorrendoagora": "Ocorrendo",
@@ -36,7 +38,7 @@ const Alert = ({ data }) => {
                         <TimelineHeader className="h-3">
                             <TimelineIcon />
                             <Typography variant="h6" color="blue-gray" className="leading-none">
-                                Alerta emitido há {data.hours}
+                                Alerta emitido ás {timestamp}
                             </Typography>
                         </TimelineHeader>
                         <TimelineBody className="pb-3">

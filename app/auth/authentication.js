@@ -350,6 +350,7 @@ const createComunity = async (name, address, user, id, radius) => {
 }
 
 const emitirAlerta = async (id, tipo, situacao, userLoggedIn, groupId, details = "", messages = []) => {
+    const group = await getComunityById(groupId)
     try {
         await addDoc(collection(db, "alerts"), {
             tipo,
@@ -360,11 +361,28 @@ const emitirAlerta = async (id, tipo, situacao, userLoggedIn, groupId, details =
             uid: userLoggedIn.uid,
             author: userLoggedIn,
             details,
-            messages
+            messages,
+            group: await group
         })
     } catch (e) {
         console.log(e)
     }
+}
+
+const isComunityMember = async (uid, groupId) => {
+    try {
+        
+            await getComunityById(groupId).then(async (comunity) => {
+                
+                if(comunity.creator.uid == uid) return true
+            comunity.members.forEach((member) => {
+                if(member.uid == userLoggedIn.uid) {
+                    return true
+                }
+            })
+
+        })
+    } catch (e) {}
 }
 
 const criarSolicitacao = async (comunity, user, id) => {
@@ -557,5 +575,6 @@ export {
     updateUser,
     getUsers,
     addMembersByRadius,
+    isComunityMember,
     report
 }

@@ -9,6 +9,7 @@ import Loading from "../../../components/Loading"
 import {useRouter} from 'next/navigation'
 import { useCookies } from "react-cookie"
 import { PiUserCircleFill } from "react-icons/pi"
+import { BsFillPatchCheckFill } from "react-icons/bs"
 
 const IdPage = ({ params }) => {
     const [comunity, setComunity] = useState('')

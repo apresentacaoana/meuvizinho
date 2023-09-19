@@ -71,7 +71,7 @@ const ProfileDrawer = ({open, handleClose}) => {
                 </Badge>
               </ListItemPrefix>
               <div className="flex-grow flex flex-col gap-1 ">
-                <Chip size="sm" value={cookies.nickname} className="lowercase w-fit" variant="ghost" color="light-green" />
+                <Chip size="sm" value={cookies.nickname ? cookies.nickname : userLoggedIn.nickname} className="lowercase w-fit" variant="ghost" color="light-green" />
                 <Typography className="text-[13px] font-bold">{userLoggedIn.name}</Typography>
               </div>
               <BsGearFill size={15} />

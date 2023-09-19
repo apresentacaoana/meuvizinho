@@ -51,7 +51,7 @@ const Alerts = () => {
                         {
                             console.log(alert.data().createdAt)
                             return (
-                                <Alert data={{author: alert.data().author, hours: getHoursOrMinutesAgo(alert.data().createdAt['nanoseconds']), situacao: alert.data().situacao, tipo: alert.data().tipo, details: alert.data().details}} key={alert.data().id} />
+                                <Alert data={{author: alert.data().author, hours: alert.data().createdAt, situacao: alert.data().situacao, tipo: alert.data().tipo, details: alert.data().details}} key={alert.data().id} />
                             )
                         }
                     )}
