@@ -82,7 +82,7 @@ const ComunityHome = () => {
                                         </div>
                                     </ListItem> 
                                     {comunity.members.map((member) => (
-                                        <ListItem key={member.uid} onClick={() => router.push(`/app/chat/private/${member.nickname.replace('@', '')}`)} className="w-full border border-gray-400">
+                                        <ListItem key={member.uid} className="w-full border border-gray-400">
                                             <ListItemPrefix>
                                             {member.photoURL ? (
                         
