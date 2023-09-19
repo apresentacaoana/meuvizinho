@@ -20,6 +20,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [notification, setNotification] = useState('')
   const router = useRouter()
+  const [reload, setReload] = useState(0)
   const [loading, setLoading] = useState(true);
 
   let userHavePhoto = null;
@@ -33,7 +34,7 @@ const Home = () => {
         setLoading(false);
     }
     getUser();
-  }, []);
+  }, [reload]);
 
   return (
     <>
@@ -71,7 +72,7 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.8 }}
             >
-              <DialogUserName userLoggedIn={person} open={open} setOpen={setOpen} />
+              <DialogUserName userLoggedIn={person} open={open} setOpen={setOpen} setReload={setReload} reload={reload} />
             </motion.div>
           )}
         </motion.div>

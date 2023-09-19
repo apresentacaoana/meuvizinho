@@ -19,7 +19,6 @@ const Chat = ({ params }) => {
         async function getAlerta() {
             await getAlertByID(params.id).then(res => {
                 console.log(res.groupId, cookies.groupId)
-                if(res.groupId != cookies.groupId) router.push('/app')
                 setAlerta(res)
                 setLoading(false)
             })

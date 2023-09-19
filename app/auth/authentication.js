@@ -9,11 +9,16 @@ import calcularDistancia from "../actions/location"
 
 const googleProvider = new GoogleAuthProvider()
 
-const loginComEmailESenha = async (email, senha) => {
+const loginComEmailESenha = async (email, senha, setAlert) => {
     try {
         await signInWithEmailAndPassword(auth, email, senha)
     } catch(e) {
-        console.log(e)
+        console.log(e.code)
+        if(e.code === 'auth/user-not-found') {
+            setAlert("Usuário não encontrado")
+        } else if (e.code === 'auth/wrong-password') {
+            setAlert("Senha incorreta")
+        }
     }
 }
 

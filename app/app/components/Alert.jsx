@@ -29,7 +29,7 @@ const Alert = ({ data }) => {
             >
             {tipoParse[data.tipo]} {situacaoParse[data.situacao]}
             </AccordionHeader>
-            <AccordionBody className="pt-0 text-base font-normal">
+            <AccordionBody className="pt-3 text-base font-normal">
                 <Timeline>
                     <TimelineItem>
                         <TimelineConnector />

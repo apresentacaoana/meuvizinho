@@ -3,14 +3,19 @@ import { IconButton } from "@material-tailwind/react"
 import {BsSendFill} from 'react-icons/bs'
 import {useEffect, useState} from 'react'
 import { useCookies } from "react-cookie"
-import { FieldValue, serverTimestamp } from "firebase/firestore"
+import { FieldValue, collection, orderBy, serverTimestamp } from "firebase/firestore"
 import { addDoc } from "firebase/firestore"
 import { getUserByUID } from "../../../../../app/auth/authentication"
+import { useCollection } from "react-firebase-hooks/firestore"
+import { query } from "firebase/firestore"
+import { db } from "../../../../firebase"
 
 const InputMessage = ({ messageRef, id, groupId }) => {
     const [message, setMessage] = useState('')
     const [cookies, setCookie] = useCookies(['isAuth', 'user'])
     const [userLoggedIn, setUser] = useState('')
+    const queryRef = query(messageRef, orderBy("createdAt", "asc"))
+    const [messages] = useCollection(queryRef, {idField: 'uid'})
 
     useEffect(() => {
         if(!cookies.user) return router.push("/credentials")
@@ -36,6 +41,23 @@ const InputMessage = ({ messageRef, id, groupId }) => {
         setMessage('')
         await addDoc(messageRef, payload)
     }
+
+    // const sendMapMessage = async () => {
+    //     if(!cookies.user ||!message) return
+    //     const payload = {
+    //         text: 'Essa é a minha localização',
+    //         map: true,
+    //         createdAt: new Date(),
+    //         uid: cookies.user.uid,
+    //         photoURL: userLoggedIn.photoURL || "",
+    //         author: userLoggedIn.nickname,
+    //         role: userLoggedIn.role,
+    //         id: Number(id),
+    //         groupId: Number(groupId)
+    //     }
+    //     setMessage('')
+    //     await addDoc(messageRef, payload)
+    // }
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {

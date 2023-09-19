@@ -2,12 +2,13 @@
 import { useEffect, useState } from "react"
 import { criarSolicitacao, getComunityById, getSolicitacoesByComunityId, getUserByUID } from "../../../auth/authentication"
 import Header from "../../../components/Header"
-import { Avatar, Button, Chip, List, ListItem, ListItemPrefix, Typography } from "@material-tailwind/react"
+import { Avatar, Button, Card, Chip, List, ListItem, ListItemPrefix, Typography } from "@material-tailwind/react"
 import { IoMdPin } from "react-icons/io"
 import Nothing from "../../../components/Nothing"
 import Loading from "../../../components/Loading"
 import {useRouter} from 'next/navigation'
 import { useCookies } from "react-cookie"
+import { PiUserCircleFill } from "react-icons/pi"
 
 const IdPage = ({ params }) => {
     const [comunity, setComunity] = useState('')
@@ -69,8 +70,13 @@ const IdPage = ({ params }) => {
                         <div className="xl:mx-80 md:my-[20px] ">
                         <div className="mt-20 items-center p-5 flex sm:flex-row justify-self-start self-start justify-start w-full flex-col sm:justify-between">
                             <div className="w-full">
-                                <Chip variant="ghost" color="red" size="sm" value={`5 ALERTAS`} className="w-fit mb-3" icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-red-900 content-['']" />} />
-                                <Typography variant="h3">{comunity.name}</Typography>
+                                <Card className="p-5 shadow-md flex flex-row justify-between items-center">
+                                    <div>
+                                        <Chip variant="ghost" color="red" size="sm" value={`5 ALERTAS`} className="w-fit" icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-red-900 content-['']" />} />
+                                        <Typography variant="h3">{comunity.name}</Typography>
+                                    </div>
+                                    <BsFillPatchCheckFill color="#35FF60" size={35} />
+                                </Card>
                                 <div className="flex gap-3 p-3 bg-green-400 mt-3 rounded-[10px] items-center">
                                     <IoMdPin className="text-white text-[2rem] w-[20%] md:w-auto" />
                                     <Typography className="text-white">{comunity.address}</Typography>
@@ -90,11 +96,19 @@ const IdPage = ({ params }) => {
                                     </Button>
                                 )}
 
-                                <List>
+                                <List className="gap-4">
                                     <Typography variant="h4" className="mt-3">Participantes</Typography>
                                     <ListItem className="w-full border shadow-md border-gray-400">
                                         <ListItemPrefix>
-                                            <Avatar src={comunity.creator.photoURL} variant="circular" alt="pessoa" />
+                                            {comunity.creator.photoURL ? (
+                        
+                                                <Avatar className="border-[2px] h-[40px] w-[40px] " src={comunity.creator.photoURL} />
+                                            ): (
+                                                <PiUserCircleFill
+                                                className="hover:cursor-pointer"
+                                                size={40}
+                                                />
+                                            )}
                                         </ListItemPrefix>
                                         <div className="flex items-center gap-5">
                                             <div>
@@ -110,7 +124,15 @@ const IdPage = ({ params }) => {
                                     {comunity.members.map((member) => (
                                         <ListItem key={member.uid} onClick={() => router.push(`/app/chat/private/${member.nickname.replace('@', '')}`)} className="w-full border border-gray-400">
                                             <ListItemPrefix>
-                                                <Avatar src={member.photoURL} variant="circular" alt="pessoa" />
+                                            {member.photoURL ? (
+                        
+                                                <Avatar className="border-[2px] h-[40px] w-[40px] " src={member.photoURL} />
+                                            ): (
+                                                <PiUserCircleFill
+                                                className="hover:cursor-pointer"
+                                                size={40}
+                                                />
+                                            )}
                                             </ListItemPrefix>
                                             <div className="flex items-center gap-5">
                                                 <div>

@@ -1,16 +1,39 @@
 'use client'
 import { Typography } from "@material-tailwind/react"
 import { useCookies } from "react-cookie"
-import { setState, useEffect, useState } from 'react'
+import { setState, useEffect, useRef, useState } from 'react'
 import moment from "moment/moment"
 import { getUserByUID } from "../../../../../app/auth/authentication"
 import {MdLocalPolice} from 'react-icons/md'
+import * as tt from '@tomtom-international/web-sdk-maps'
 
-const Message = ({ text, uid, photoURL, name, createdAt, role }) => {
-    const [cookies, setCookie] = useCookies(['isAuth', 'user'])
+const Message = ({ text, uid, photoURL, name, createdAt, role, haveMap = false }) => {
+    const [cookies, setCookie] = useCookies(['isAuth', 'user', 'location'])
     if(!cookies.user) return
     const itsMe = uid === cookies.user.uid
     let timestamp = moment.unix(createdAt).format('LT')
+    const mapElement = useRef()
+    const [ourMap, setMap] = useState({})
+
+    useEffect(() => {
+        if(haveMap) {
+            
+        let map = tt.map({
+            container: mapElement.current,
+            key: 'dmyasSSGylyNOd3gN7DuSlNuVKI2hc4u',
+            center: [cookies.location.latitude, cookies.location.longitude],
+            zoom: 1
+        })
+
+        setMap(map)
+
+        let marker = new tt.Marker({
+            draggable: false,
+        }).setLngLat([cookies.location.latitude, cookies.location.longitude]).addTo(map)
+        
+        return () => map.remove()
+        }
+    }, [])
 
     return (
         <div className={`${itsMe ? 'self-end justify-self-end' : 'self-start justify-self-start'} flex items-end gap-3 `}>
@@ -23,6 +46,7 @@ const Message = ({ text, uid, photoURL, name, createdAt, role }) => {
                     <div className={`w-[100%] ${itsMe ? 'py-[10px]' : 'pb-[10px]'} text-start px-[25px]`}>
                         {text}
                     </div>
+                    {haveMap && (<div ref={mapElement} className="w-full h-full" />)}
                     <Typography variant="small" className={`${itsMe ? "right-0" : "left-0 ml-3"} w-[70px] absolute -bottom-6 justify-self-start self-end text-[#757575]`}>{timestamp}</Typography>
             
                 </div>

@@ -7,6 +7,8 @@ import { db } from "../../../../../app/firebase"
 import { useCollection, useCollectionData } from "react-firebase-hooks/firestore"
 import moment from "moment/moment"
 import axios from "axios"
+import { getAlertByID } from "../../../../auth/authentication"
+import Loading from "../../../../components/Loading"
 
 const ChatRoom = ({ id }) => {
     
@@ -14,17 +16,32 @@ const ChatRoom = ({ id }) => {
     const queryRef = query(messageRef, orderBy("createdAt", "asc"))
     const [messages] = useCollection(queryRef, {idField: 'uid'})
     const [cookies, setCookie] = useCookies(['groupId'])
-    console.log(cookies.groupId)
+    const [alert, setAlert] = useState({})
+    const [loading, setLoading] = useState(true)
 
     const scrollTo = useRef(null)
 
     useEffect(() => {
-        scrollTo.current.scrollIntoView({behavior: "smooth"})
+        const getData = async () => {
+            await getAlertByID(id).then(res => {
+                setAlert(res)
+                setLoading(false)
+            })
+            
+        }
+        getData()
+        if(scrollTo.current !== null) {
+            
+            scrollTo.current.scrollIntoView({behavior: "smooth"})
+        }
     }, [messages])
 
     return (
         <div>
-            <div className="flex flex-col gap-8 md:mb-[80px] mb-[100px] xl:mx-80 md:my-[20px] m-5">
+            {loading ? <Loading /> : (
+                <div>
+                    
+                <div className="flex flex-col gap-8 md:mb-[80px] mb-[100px] xl:mx-80 md:my-[20px] m-5">
                 {messages && messages.docs.map(msg => (
 
                     <>
@@ -42,6 +59,8 @@ const ChatRoom = ({ id }) => {
                 <div ref={scrollTo}></div>
             </div>
             <InputMessage messageRef={messageRef} id={id} groupId={cookies.groupId} />
+            </div>
+            )}
         </div>
     )
 }

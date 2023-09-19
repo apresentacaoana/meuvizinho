@@ -23,15 +23,14 @@ function Icon() {
     );
 }  
 
-const DialogUserName = ({ open, setOpen, userLoggedIn }) => {
-    const [cookies, setCookie] = useCookies(['isAuth', 'user'])
+const DialogUserName = ({ open, setOpen, userLoggedIn, reload, setReload }) => {
+    const [cookies, setCookie] = useCookies(['isAuth', 'user', 'nickname'])
     const [nickname, setNickname] = useState('')
-    const [reload, setReload] = useState(1)
     const [alert, setAlert] = useState('')
 
     useEffect(() => {
         handler()
-    }, [reload])
+    }, [])
 
     let handleChange = (e) => {
         let regex = /^[a-zA-Z0-9]*$/
@@ -56,6 +55,8 @@ const DialogUserName = ({ open, setOpen, userLoggedIn }) => {
         }
         setOpen(false)
         await registerNickname(cookies.user.uid, "@" + nickname.toLowerCase())
+        setCookie('nickname', '@' + nickname.toLowerCase())
+        setReload(reload + 1)
     }
 
     return (

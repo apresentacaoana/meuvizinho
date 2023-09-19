@@ -37,7 +37,7 @@ export default function HorizontalCards({ userLoggedIn }) {
       },
     ]
 
-    if(userLoggedIn.plan == 'free') {
+    if(userLoggedIn.plan == 'free' && userLoggedIn.role !== 'admin') {
       cardsRaw.push({
         "color": "#DFF1FF",
         "text_color": "#000000",
@@ -46,7 +46,7 @@ export default function HorizontalCards({ userLoggedIn }) {
         "texttwo": "Assinatura",
         "url": "/app/plan/buy"
       })
-    } else {
+    } else if (userLoggedIn.role !== 'admin' && userLoggedIn.plan !== 'plan') {
       cardsRaw.push({
         "color": "#DFF1FF",
         "text_color": "#000000",

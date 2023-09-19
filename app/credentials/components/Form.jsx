@@ -8,6 +8,7 @@ import { entrarComGoogle, loginComEmailESenha, registrarComEmailESenha, verifica
 import {TbAlertCircleFilled} from 'react-icons/tb'
 import Loading from "../../components/Loading"
 import { useRouter } from "next/navigation"
+import { FirebaseError } from "firebase/app"
 
 const Form = ({ reload, setReload }) => {
     const [type, setType] = useState('signin')
@@ -75,10 +76,6 @@ const Form = ({ reload, setReload }) => {
             return
         }
         
-        if(await verificarSeOEmailJaExiste(email)) {
-            setAlert('Já existe uma conta com esse email')
-            return
-        }
         setLoading(true)
 
         await registrarComEmailESenha(name, email, password, city, bairro, state, country, number, street)
@@ -89,7 +86,6 @@ const Form = ({ reload, setReload }) => {
 
     
     const handleSignIn = async (e) => {
-        setLoading(true)
         e.preventDefault()
         setAlert('')
 
@@ -99,17 +95,12 @@ const Form = ({ reload, setReload }) => {
             setAlert('Insira suas credenciais.')
             return
         }
+        setLoading(true)
         
-        
-        if(await !verificarSeOEmailJaExiste(email)) {
-            setAlert('Essa conta não existe.')
-            return
-        }
 
-        await loginComEmailESenha(email, password).catch(err => {
-            setAlert('Senha errada')
-        })
+        await loginComEmailESenha(email, password, setAlert)
         setLoading(false)
+
 
     }
 

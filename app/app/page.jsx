@@ -18,7 +18,6 @@ const App = () => {
             setCookie('groupId', null)
             if(cookies.user) {
                 await getUserByUID(cookies.user.uid).then(async (userLoggedIn) => {
-                    console.log(userLoggedIn.latitude != cookies.location.latitude && userLoggedIn.longitude != cookies.location.longitude)
                     if(userLoggedIn.latitude != cookies.location.latitude && userLoggedIn.longitude != cookies.location.longitude) {
                         await updateUser(userLoggedIn, {latitude: cookies.location.latitude, longitude: cookies.location.longitude})
                     }
@@ -26,14 +25,11 @@ const App = () => {
                         res.forEach((comunity) => {
                             if(comunity.creator.uid == userLoggedIn.uid) return setCookie('groupId', comunity.id)
                             comunity.members.forEach((member) => {
-                                console.log("TESTANDO 2: ", member.uid == userLoggedIn.uid)
                                 if(member.uid == userLoggedIn.uid) return setCookie('groupId', comunity.id)
                                 else setCookie('groupId', null)
                             })
                         })
-                        console.log(cookies.groupId)
                     })
-                    console.log(cookies.location)
                 })
             }
         }

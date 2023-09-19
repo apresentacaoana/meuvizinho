@@ -49,33 +49,33 @@ const RequestIdPage = ({ params }) => {
                 <div>
                     <Header title={"Solicitações"} />
                     {requests.length > 0 ? (
-                                            <div className="xl:mx-80 md:my-[20px] m-5">
-                                            <List className="mt-20 ">
-                                                {requests.map((request) => (
-                                                    <ListItem key={request.id} className="border shadow-md border-gray-400">
-                                                        <ListItemPrefix>
-                                                            <Avatar src={request.user.photoURL} />
-                                                        </ListItemPrefix>
-                                                        <div className="flex justify-between items-center w-full">
-                                                            <div>
-                                                                <Chip variant="ghost" color="gray" size="sm" value={request.user.nickname.toLowerCase()} className="w-fit lowercase" />
-                                                                <Typography>
-                                                                    {request.user.name}
-                                                                </Typography>
-                                                            </div>
-                                                            <div className="flex gap-2 sm:gap-5">
-                                                                <IconButton onClick={(e) => handleAccept(request.id)} color="green" size="sm" className="rounded-full" variant="gradient">
-                                                                    <BsCheck2 size={20} />
-                                                                </IconButton>
-                                                                <IconButton onClick={(e) => handleDeny(request.id)} color="red" size="sm" className="rounded-full" variant="gradient">
-                                                                    <AiOutlineClose size={20} />
-                                                                </IconButton>
-                                                            </div>
-                                                        </div>
-                                                    </ListItem>
-                                                ))}
-                                            </List>
+                        <div className="xl:mx-80 md:my-[20px] m-5">
+                        <List className="mt-20 ">
+                            {requests.map((request) => (
+                                <ListItem key={request.id} className="border shadow-md border-gray-400">
+                                    <ListItemPrefix>
+                                        <Avatar src={request.user.photoURL} />
+                                    </ListItemPrefix>
+                                    <div className="flex justify-between items-center w-full">
+                                        <div className="">
+                                            <Chip variant="ghost" color="gray" size="sm" value={request.user.nickname.toLowerCase()} className="w-fit lowercase" />
+                                            <Typography>
+                                                {request.user.name}
+                                            </Typography>
                                         </div>
+                                        <div className="flex gap-2 sm:gap-5">
+                                            <IconButton onClick={(e) => handleAccept(request.id)} color="green" size="sm" className="rounded-full" variant="gradient">
+                                                <BsCheck2 size={20} />
+                                            </IconButton>
+                                            <IconButton onClick={(e) => handleDeny(request.id)} color="red" size="sm" className="rounded-full" variant="gradient">
+                                                <AiOutlineClose size={20} />
+                                            </IconButton>
+                                        </div>
+                                    </div>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </div>
                     ) : (
                         <Nothing />
                         

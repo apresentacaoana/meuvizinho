@@ -5,15 +5,17 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useCookies } from "react-cookie"
 import { BsGearFill, BsPinFill, BsPinMap } from "react-icons/bs"
+import { PiUserCircleFill } from "react-icons/pi"
 
 const ProfileDrawer = ({open, handleClose}) => {
-    const [cookies, setCookie] = useCookies(['user, isAuth'])
+    const [cookies, setCookie] = useCookies(['user, isAuth', 'nickname'])
     const router = useRouter()
     const [userLoggedIn, setUser] = useState({})
     const encerrarSessao = () => {
-        logout()
-        setCookie('user', null)
-        setCookie('isAuth', null)
+      setCookie('user', null)
+      setCookie('isAuth', null)
+      setCookie('nickname', null)
+      logout()
     }
 
     useEffect(() => {
@@ -28,7 +30,7 @@ const ProfileDrawer = ({open, handleClose}) => {
 
     return (
     <Drawer placement="right" open={open} onClose={handleClose}>
-        <div className="mb-2 flex items-center justify-between p-4">
+        <div className="flex items-center justify-between p-4">
           <Typography variant="h5" color="blue-gray">
             meu<span className="text-green-400">vizinho.</span>
           </Typography>
@@ -57,11 +59,19 @@ const ProfileDrawer = ({open, handleClose}) => {
               
               <ListItemPrefix>
                 <Badge overlap="circular" placement="bottom-end" color="green">
-                  <Avatar className="border-[2px] border-green-400" src={userLoggedIn.photoURL} />
+                  {userLoggedIn.photoURL ? (
+                    
+                    <Avatar className="border-[2px] h-[40px] w-[40px] border-green-400" src={userLoggedIn.photoURL} />
+                  ): (
+                    <PiUserCircleFill
+                      className="hover:cursor-pointer"
+                      size={40}
+                    />
+                  )}
                 </Badge>
               </ListItemPrefix>
               <div className="flex-grow flex flex-col gap-1 ">
-                <Chip size="sm" value={userLoggedIn.nickname} className="lowercase w-fit" variant="ghost" color="light-green" />
+                <Chip size="sm" value={cookies.nickname} className="lowercase w-fit" variant="ghost" color="light-green" />
                 <Typography className="text-[13px] font-bold">{userLoggedIn.name}</Typography>
               </div>
               <BsGearFill size={15} />

@@ -17,23 +17,22 @@ const Alerts = () => {
     const [alerts] = useCollection(q, {idField: 'id'})
 
     const getHoursOrMinutesAgo = (createdAtNanos) => {
-        console.log(createdAtNanos)
-        const now = moment(); // Data e hora atual
-        const createdAtMilliseconds = createdAtNanos / 1000000; // Convertendo nanossegundos para milissegundos
-        const createdAt = moment(createdAtMilliseconds); // Data e hora da criação
+        const now = moment.utc();
+        const createdAtMilliseconds = createdAtNanos / 1000000;
+        const createdAt = moment.utc(createdAtMilliseconds);
         
         const duration = moment.duration(now.diff(createdAt));
-        
-        const hoursAgo = duration.hours();
-        const minutesAgo = duration.minutes();
-        const secondsAgo = duration.seconds();
     
+        const hoursAgo = Math.floor(duration.asHours());
+        const minutesAgo = Math.floor(duration.asMinutes()) % 60; // modulus to get remaining minutes
+        const secondsAgo = Math.floor(duration.asSeconds()) % 60; // modulus to get remaining seconds
+        
         if (hoursAgo > 0) {
-            return `${hoursAgo} hora(s) atrás`;
+           return `${hoursAgo} hora(s) atrás`;
         } else if (minutesAgo > 0) {
-            return `${minutesAgo} minuto(s) atrás`;
+           return `${minutesAgo} minuto(s) atrás`;
         } else {
-            return `${secondsAgo} segundo(s) atrás`;
+           return `${secondsAgo} segundo(s) atrás`;
         }
     };
     
@@ -48,9 +47,14 @@ const Alerts = () => {
             <div className="flex flex-col gap-4">
                 { alerts && alerts.docs.length > 0 ?
                     <>     
-                    {alerts && alerts.docs.map((alert) => (
-                        <Alert data={{author: alert.data().author, hours: getHoursOrMinutesAgo(alert.data().createdAt['nanoseconds']), situacao: alert.data().situacao, tipo: alert.data().tipo, details: alert.data().details}} key={alert.data().id} />
-                    ))}
+                    {alerts && alerts.docs.map((alert) => 
+                        {
+                            console.log(alert.data().createdAt)
+                            return (
+                                <Alert data={{author: alert.data().author, hours: getHoursOrMinutesAgo(alert.data().createdAt['nanoseconds']), situacao: alert.data().situacao, tipo: alert.data().tipo, details: alert.data().details}} key={alert.data().id} />
+                            )
+                        }
+                    )}
                     </>
                     : <>
                         <AlertUI color="light-blue">Atualmente não há nenhum alerta emitido em sua vizinhança.</AlertUI>
