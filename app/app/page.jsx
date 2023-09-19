@@ -26,13 +26,11 @@ const App = () => {
                         res.forEach((comunity) => {
                             if(comunity.creator.uid == userLoggedIn.uid) {
                                 setCookie('groupId', comunity.id)
-                                setCookie('groups', [...cookies.groups].push(comunity.id))
                                 return 
                             }
                             comunity.members.forEach((member) => {
                                 if(member.uid == userLoggedIn.uid) {
                                     setCookie('groupId', comunity.id)
-                                    setCookie('groups', [...cookies.groups].push(comunity.id))
                                     return 
                                 }
                                 else setCookie('groupId', null)
