@@ -4,7 +4,7 @@ import UI from "./components/UI"
 import { useCookies } from "react-cookie"
 import { useEffect, useState } from "react"
 import { auth } from "../firebase"
-import { getComunities, getUserByUID, updateUser } from "../auth/authentication"
+import { getComunities, getUserByUID, isComunityMember, updateUser } from "../auth/authentication"
 
 const App = () => {
     const [cookies, setCookie] = useCookies(['user', 'groupId', 'location', 'groups'])
@@ -23,21 +23,13 @@ const App = () => {
                         await updateUser(userLoggedIn, {latitude: cookies.location.latitude, longitude: cookies.location.longitude})
                     }
                     await getComunities().then((res) => {
+                        setCookie('groupId', null)
                         res.forEach((comunity) => {
-                            if(comunity.creator.uid == userLoggedIn.uid) {
-                                setCookie('groupId', comunity.id)
-                                return 
+                            if(isComunityMember(userLoggedIn.uid, comunity.id)) {
+                                return setCookie('groupId', comunity.id)
                             }
-                            comunity.members.forEach((member) => {
-                                if(member.uid == userLoggedIn.uid) {
-                                    setCookie('groupId', comunity.id)
-                                    return 
-                                }
-                                else setCookie('groupId', null)
-                            })
                         })
                     })
-                    console.log(cookies.groups)
                 })
             }
         }
