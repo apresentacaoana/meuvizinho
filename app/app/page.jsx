@@ -21,18 +21,21 @@ const App = () => {
                 await getUserByUID(cookies.user.uid).then(async (userLoggedIn) => {
                     await getComunities().then((res) => {
                         setCookie('groupId', null)
+
                         res.forEach((comunity) => {
-                            if(comunity.creator.uid == userLoggedIn.uid) return setCookie('groupId', comunity.id)
+                            if(comunity.creator.uid == userLoggedIn.uid) { return setCookie('groupId', comunity.id)}
                             comunity.members.forEach((member) => {
-                            if(member.uid == userLoggedIn.uid) {
-                                return setCookie('groupId', comunity.id)
-                            }
+                                if(member.uid == userLoggedIn.uid) {
+                                    return setCookie('groupId', comunity.id)
+                                }
+                            })
                         })
+
                     })
-                    if(userLoggedIn.latitude != cookies.location.latitude && userLoggedIn.longitude != cookies.location.longitude) {
-                        await updateUser(userLoggedIn, {latitude: cookies.location.latitude, longitude: cookies.location.longitude})
-                    }
                 })
+                if(userLoggedIn.latitude != cookies.location.latitude && userLoggedIn.longitude != cookies.location.longitude) {
+                    await updateUser(userLoggedIn, {latitude: cookies.location.latitude, longitude: cookies.location.longitude})
+                }
             }
         }
         getData()
