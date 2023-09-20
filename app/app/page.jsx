@@ -17,7 +17,9 @@ const App = () => {
         const getData = async () => {
             setCookie('groupId', null)
             if(cookies.user) {
-                setCookie('groups', [])
+                if(userLoggedIn.latitude != cookies.location.latitude && userLoggedIn.longitude != cookies.location.longitude) {
+                    await updateUser(userLoggedIn, {latitude: cookies.location.latitude, longitude: cookies.location.longitude})
+                }
                 await getUserByUID(cookies.user.uid).then(async (userLoggedIn) => {
                     await getComunities().then((res) => {
                         setCookie('groupId', null)
@@ -33,9 +35,6 @@ const App = () => {
 
                     })
                 })
-                if(userLoggedIn.latitude != cookies.location.latitude && userLoggedIn.longitude != cookies.location.longitude) {
-                    await updateUser(userLoggedIn, {latitude: cookies.location.latitude, longitude: cookies.location.longitude})
-                }
             }
         }
         getData()

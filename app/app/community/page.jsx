@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import Nothing from '../../components/Nothing'
-import { getComunityByUser, getUserByUID } from "../../auth/authentication"
+import { getAlertsByGroupId, getComunityByUser, getUserByUID } from "../../auth/authentication"
 import Loading from "../../components/Loading"
 import { BsFillPatchCheckFill } from "react-icons/bs"
 import { PiUserCircleFill } from "react-icons/pi"
@@ -17,6 +17,7 @@ const ComunityHome = () => {
     const router = useRouter()
     const [loading, setLoading] = useState(true)
     const [comunity, setComunity] = useState({})
+    const [alerts, setAlerts] = useState([])
 
     useEffect(() => {
         const getData = async () => {
@@ -28,7 +29,10 @@ const ComunityHome = () => {
 
             const response = await getUserByUID(cookies.user.uid)
             const responseComu = await getComunityByUser(cookies.user.uid)
+            const responseAlerts = await getAlertsByGroupId(await responseComu.id)
+
             setUser(await response)
+            setAlerts(await responseAlerts)
             setComunity(await responseComu)
             console.log(responseComu)
             setLoading(false)
@@ -47,7 +51,9 @@ const ComunityHome = () => {
                             <div className="w-full">
                                 <Card className="p-5 shadow-md flex flex-row justify-between items-center">
                                     <div>
-                                        <Chip variant="ghost" color="red" size="sm" value={`5 ALERTAS`} className="w-fit" icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-red-900 content-['']" />} />
+                                        {alerts.length > 0 && (
+                                            <Chip variant="ghost" color="red" size="sm" value={`${alerts.length} ${alerts.length == 1 ? 'ALERTA' : 'ALERTAS'}`} className="w-fit" icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-red-900 content-['']" />} />
+                                        )}
                                         <Typography variant="h3">{comunity.name}</Typography>
                                     </div>
                                     <BsFillPatchCheckFill color="#35FF60" size={35} />

@@ -218,6 +218,23 @@ const getAlertByID = async (id) => {
     }
 }
 
+const getAlertsByGroupId = async (id) => {
+    try {
+        const q = query(collection(db, "alerts"), where("groupId", "==", Number(id)), limit(1))
+        const docs = await getDocs(q)
+        let response = []
+        docs.forEach((doc) => {
+            if(doc.data().id == id) {
+                response.push({
+                    ...doc.data(),
+                    docId: doc.id
+                })
+            }
+        })
+        return response
+    } catch (e) {}
+}
+
 const getComunities = async () => {
     try {
         const comunityRef = collection(db, "comunities")
@@ -301,6 +318,14 @@ const getComunityByUser = async (id) => {
                     docId: doc.id
                 }
             }
+            doc.data().members.forEach((member) => {
+                if(member.uid == id) {
+                    response = {
+                       ...doc.data(),
+                        docId: doc.id
+                    }
+                }
+            })
         })
         return response
     } catch(e) {
@@ -576,5 +601,6 @@ export {
     getUsers,
     addMembersByRadius,
     isComunityMember,
-    report
+    report,
+    getAlertsByGroupId
 }
