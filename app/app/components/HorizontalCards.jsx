@@ -69,7 +69,7 @@ export default function HorizontalCards({ userLoggedIn }) {
     }
     
     
-    if(cookies.groupId) {
+    if(cookies.groupId !== null) {
       cardsRaw.push(
         {
           "color": "#EAFEAB",
