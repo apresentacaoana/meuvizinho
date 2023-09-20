@@ -22,7 +22,9 @@ const App = () => {
                     await getComunities().then((res) => {
                         setCookie('groupId', null)
                         res.forEach((comunity) => {
-                            if(isComunityMember(userLoggedIn.uid, comunity.id)) {
+                            if(comunity.creator.uid == userLoggedIn.uid) return setCookie('groupId', comunity.id)
+                            comunity.members.forEach((member) => {
+                            if(member.uid == userLoggedIn.uid) {
                                 return setCookie('groupId', comunity.id)
                             }
                         })

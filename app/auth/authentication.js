@@ -375,7 +375,7 @@ const isComunityMember = async (uid, groupId) => {
             await getComunityById(groupId).then(async (comunity) => {
                 
                 if(comunity.creator.uid == uid) return true
-            comunity.members.forEach((member) => {
+                comunity.members.forEach((member) => {
                 if(member.uid == userLoggedIn.uid) {
                     return true
                 }
